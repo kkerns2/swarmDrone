@@ -1,0 +1,22 @@
+<launch>
+    <arg name="tf_prefix" default=""/>
+    
+    <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+        <param name="resolution" value="0.05" />
+
+        <!-- fixed map frame -->
+        <param name="frame_id" type="string" value="/map" />
+	
+	    <param name="sensor_model/max_range" value="500.0" />
+
+        <!-- data source to integrate (PointCloud2) -->
+        <remap from="cloud_in" to="$(arg tf_prefix)/kinect/depth/points"/>
+    </node>
+
+    <!--include file="$(find octo_w_slam)/launch/amcl.launch">
+        <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+        <arg name="map" value="urban"/>
+
+    </include-->
+
+</launch>
