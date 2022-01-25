@@ -1,13 +1,13 @@
 DWAPlannerROS:
 
 # Robot Configuration Parameters
-  max_vel_x: 0.5  # 0.55
+  max_vel_x: 1.5  # 0.55
   min_vel_x: 0.0 
 
-  max_vel_y: 0.5  # diff drive robot
+  max_vel_y: 1.5  # diff drive robot
   min_vel_y: 0.0  # diff drive robot
 
-  max_vel_trans: 0.5 # choose slightly less than the base's capability
+  max_vel_trans: 1.5 # choose slightly less than the base's capability
   min_vel_trans: 0.1  # this is the min trans velocity when there is negligible rotational velocity
   trans_stopped_vel: 0.1
 
@@ -26,7 +26,7 @@ DWAPlannerROS:
   # latch_xy_goal_tolerance: false
 
 # Forward Simulation Parameters
-  sim_time: 1.0       # 1.7
+  sim_time: 1.7       # 1.7
   vx_samples: 6       # 3
   vy_samples: 1       # diff drive robot, there is only one sample
   vtheta_samples: 20  # 20
