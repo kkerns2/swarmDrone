@@ -21,8 +21,8 @@
     </group>
 
     <group ns="drone2">
-        <param name="amcl/initial_pose_x" value="-10" />
-        <param name="amcl/initial_pose_y" value="3" />
+        <param name="amcl/initial_pose_x" value="-3" />
+        <param name="amcl/initial_pose_y" value="1" />
         <include file="$(find octo_w_slam)/launch/amcl.launch">
             <arg name="tf_prefix" value="drone2"/>
         </include>
@@ -30,6 +30,32 @@
         <!--Call the navigation stack for drone2 -->              
         <include file="$(find octo_w_slam)/launch/move_base.launch">
             <arg name="tf_prefix" value="drone2"/>
+        </include>
+    </group>
+
+    <group ns="drone3">
+        <param name="amcl/initial_pose_x" value="-6" />
+        <param name="amcl/initial_pose_y" value="1" />
+        <include file="$(find octo_w_slam)/launch/amcl.launch">
+            <arg name="tf_prefix" value="drone3"/>
+        </include>
+
+        <!--Call the navigation stack for drone2 -->              
+        <include file="$(find octo_w_slam)/launch/move_base.launch">
+            <arg name="tf_prefix" value="drone3"/>
+        </include>
+    </group>
+
+    <group ns="drone4">
+        <param name="amcl/initial_pose_x" value="-9" />
+        <param name="amcl/initial_pose_y" value="1" />
+        <include file="$(find octo_w_slam)/launch/amcl.launch">
+            <arg name="tf_prefix" value="drone4"/>
+        </include>
+
+        <!--Call the navigation stack for drone2 -->              
+        <include file="$(find octo_w_slam)/launch/move_base.launch">
+            <arg name="tf_prefix" value="drone4"/>
         </include>
     </group>
 
