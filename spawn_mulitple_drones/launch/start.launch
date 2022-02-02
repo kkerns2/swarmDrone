@@ -23,14 +23,46 @@
             <arg name="name" value ="drone2"/>
             <arg name="tf_prefix" value="drone2"/>
             <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/>
-            <arg name="x" value="-10.0"/>
-            <arg name="y" value="3.0"/>
+            <arg name="x" value="-3.0"/>
+            <arg name="y" value="1.0"/>
             <arg name="z" value="0.0"/>
         </include>
 
         <node pkg="rviz" type="rviz" name="rviz" args="-d /home/ubuntu/catkin_ws/src/spawn_mulitple_drones/rviz_cfg/outdoor_cfg_d2.rviz"/>    
         <include file = "/home/ubuntu/catkin_ws/src/hector_quadrotor_sim/takeoff_land/launch/takeoff_land.launch">
             <arg name="tf_prefix" value="drone2"/>
+        </include>
+    </group>
+
+    <group ns="drone3">
+        <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+            <arg name="name" value ="drone3"/>
+            <arg name="tf_prefix" value="drone3"/>
+            <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/>
+            <arg name="x" value="-6.0"/>
+            <arg name="y" value="1.0"/>
+            <arg name="z" value="0.0"/>
+        </include>
+
+        <node pkg="rviz" type="rviz" name="rviz" args="-d /home/ubuntu/catkin_ws/src/spawn_mulitple_drones/rviz_cfg/outdoor_cfg_d3.rviz"/>    
+        <include file = "/home/ubuntu/catkin_ws/src/hector_quadrotor_sim/takeoff_land/launch/takeoff_land.launch">
+            <arg name="tf_prefix" value="drone3"/>
+        </include>
+    </group>
+
+    <group ns="drone4">
+        <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+            <arg name="name" value ="drone4"/>
+            <arg name="tf_prefix" value="drone4"/>
+            <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/>
+            <arg name="x" value="-9.0"/>
+            <arg name="y" value="1.0"/>
+            <arg name="z" value="0.0"/>
+        </include>
+
+        <node pkg="rviz" type="rviz" name="rviz" args="-d /home/ubuntu/catkin_ws/src/spawn_mulitple_drones/rviz_cfg/outdoor_cfg_d4.rviz"/>    
+        <include file = "/home/ubuntu/catkin_ws/src/hector_quadrotor_sim/takeoff_land/launch/takeoff_land.launch">
+            <arg name="tf_prefix" value="drone4"/>
         </include>
     </group>
 
