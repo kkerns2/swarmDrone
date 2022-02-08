@@ -11,5 +11,5 @@
 	path = hector_slam
 	url = https://github.com/tu-darmstadt-ros-pkg/hector_slam.git
 [submodule "octomap_mapping"]
-	path = octomap_mapping
+	path = octomap
 	url = https://github.com/OctoMap/octomap.git
