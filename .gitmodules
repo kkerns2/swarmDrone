@@ -13,3 +13,6 @@
 [submodule "octomap_mapping"]
 	path = octomap
 	url = https://github.com/OctoMap/octomap.git
+[submodule "yolov5"]
+	path = yolov5
+	url = https://github.com/ultralytics/yolov5.git
