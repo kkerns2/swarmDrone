@@ -10,9 +10,9 @@
 [submodule "hector_slam"]
 	path = hector_slam
 	url = https://github.com/tu-darmstadt-ros-pkg/hector_slam.git
-[submodule "octomap_mapping"]
-	path = octomap
-	url = https://github.com/OctoMap/octomap.git
 [submodule "yolov5"]
 	path = yolov5
 	url = https://github.com/ultralytics/yolov5.git
+[submodule "octomap"]
+	path = octomap
+	url = https://github.com/OctoMap/octomap.git
