@@ -1,13 +1,13 @@
 DWAPlannerROS:
 
 # Robot Configuration Parameters
-  max_vel_x: 1.5  # 0.55
+  max_vel_x: 1.0 # 0.55
   min_vel_x: 0.0 
 
-  max_vel_y: 1.5  # diff drive robot
+  max_vel_y: 1.0  # diff drive robot
   min_vel_y: 0.0  # diff drive robot
 
-  max_vel_trans: 1.5 # choose slightly less than the base's capability
+  max_vel_trans: 1.0 # choose slightly less than the base's capability
   min_vel_trans: 0.1  # this is the min trans velocity when there is negligible rotational velocity
   trans_stopped_vel: 0.1
 
@@ -21,8 +21,8 @@ DWAPlannerROS:
   acc_lim_y: 0.0      # diff drive robot
 
 # Goal Tolerance Parameters
-  yaw_goal_tolerance: 0.3 # 0.05
-  xy_goal_tolerance: 0.15  # 0.10
+  yaw_goal_tolerance: 0.05 # 0.05
+  xy_goal_tolerance: 0.10  # 0.10
   # latch_xy_goal_tolerance: false
 
 # Forward Simulation Parameters
@@ -34,7 +34,7 @@ DWAPlannerROS:
 # Trajectory Scoring Parameters
   path_distance_bias: 64.0      # 32.0   - weighting for how much it should stick to the global path plan
   goal_distance_bias: 24.0      # 24.0   - wighting for how much it should attempt to reach its goal
-  occdist_scale: 0.5            # 0.01   - weighting for how much the controller should avoid obstacles
+  occdist_scale: 0.05            # 0.01   - weighting for how much the controller should avoid obstacles
   forward_point_distance: 0.325 # 0.325  - how far along to place an additional scoring point
   stop_time_buffer: 0.2         # 0.2    - amount of time a robot must stop in before colliding for a valid traj.
   scaling_speed: 0.25           # 0.25   - absolute velocity at which to start scaling the robot's footprint

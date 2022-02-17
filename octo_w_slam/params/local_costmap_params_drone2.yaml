@@ -1,8 +1,8 @@
 local_costmap:
    global_frame: map
    robot_base_frame: drone2/base_footprint
-   update_frequency: 5.0
-   publish_frequency: 5.0
+   update_frequency: 2.0
+   publish_frequency: 3.0
    rolling_window: true
    width: 4.0
    height: 4.0

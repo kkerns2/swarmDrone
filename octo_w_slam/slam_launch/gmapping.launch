@@ -1,6 +1,6 @@
 <launch>
     <arg name="tf_prefix" default=""/>
-    <arg name="scan_topic"  default="$(arg tf_prefix)/kinect/scan" />
+
     <arg name="base_frame"  default="$(arg tf_prefix)/base_footprint"/>
     <arg name="odom_frame"  default="world"/>
   
@@ -45,6 +45,5 @@
       <param name="llsamplestep" value="0.01"/>
       <param name="lasamplerange" value="0.005"/>
       <param name="lasamplestep" value="0.005"/>
-      <remap from="scan" to="$(arg scan_topic)"/>
     </node>
   </launch>

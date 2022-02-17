@@ -10,6 +10,7 @@
     <group ns="drone1">
         <param name="amcl/initial_pose_x" value="0" />
         <param name="amcl/initial_pose_y" value="1" />
+        <param name="amcl/initial_pose_y" value="2" />
         <include file="$(find octo_w_slam)/launch/amcl.launch">
             <arg name="tf_prefix" value="drone1"/>
         </include>
@@ -23,6 +24,7 @@
     <group ns="drone2">
         <param name="amcl/initial_pose_x" value="-3" />
         <param name="amcl/initial_pose_y" value="1" />
+        <param name="amcl/initial_pose_y" value="2" />
         <include file="$(find octo_w_slam)/launch/amcl.launch">
             <arg name="tf_prefix" value="drone2"/>
         </include>
@@ -36,6 +38,7 @@
     <group ns="drone3">
         <param name="amcl/initial_pose_x" value="-6" />
         <param name="amcl/initial_pose_y" value="1" />
+        <param name="amcl/initial_pose_y" value="2" />
         <include file="$(find octo_w_slam)/launch/amcl.launch">
             <arg name="tf_prefix" value="drone3"/>
         </include>
@@ -49,6 +52,7 @@
     <group ns="drone4">
         <param name="amcl/initial_pose_x" value="-9" />
         <param name="amcl/initial_pose_y" value="1" />
+        <param name="amcl/initial_pose_y" value="2" />
         <include file="$(find octo_w_slam)/launch/amcl.launch">
             <arg name="tf_prefix" value="drone4"/>
         </include>
@@ -58,5 +62,7 @@
             <arg name="tf_prefix" value="drone4"/>
         </include>
     </group>
+
+    <include file="$(find explorer)/launch/multi_map_merge.launch"/>
 
 </launch>
