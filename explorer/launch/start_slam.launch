@@ -3,6 +3,8 @@
 <launch>
   
   <arg name="tf_prefix" default="drone1"/>
+  <node pkg="tf" type="static_transform_publisher" name="map_to_odom_broadcaster" args="0 0 0 0 0 0 $(arg tf_prefix)/map $(arg tf_prefix)/world 100"/>
+
   <include file="$(find hector_mapping)/launch/mapping_default.launch">
     <arg name="base_frame" value="$(arg tf_prefix)/base_footprint"/>
     <arg name="odom_frame" value="$(arg tf_prefix)/world"/>
@@ -16,7 +18,7 @@
     <arg name="scan_topic" value="/$(arg tf_prefix)/scan" />
     <remap from="/$(arg drone_name)/poseupdate" to="/$(arg drone_name)/initialpose" />
   </include>
-
+  
   <arg name="map_file_path" default="$(find hector_geotiff)/maps"/>
   <arg name="map_file_base_name" default="$(arg tf_prefix)_hector_slam_map"/>
 
@@ -39,7 +41,7 @@
 
   <node pkg="topic_tools" type="throttle" name="map_throttle" args="messages map 0.015 map_thottled" />
 
-  <node pkg="tf" type="static_transform_publisher" name="map_to_odom_broadcaster" args="0 0 0 0 0 0 $(arg tf_prefix)/map $(arg tf_prefix)/world 10"/>
+  
   <!--node pkg="tf" type="static_transform_publisher" name="$(arg tf_prefix)_world_to_$(arg tf_prefix)_base_footprint_broadcaster"  args="0 0 0 0 0 0 /$(arg tf_prefix)/map /$(arg tf_prefix)/base_footprint 10"/-->
 
 </launch>

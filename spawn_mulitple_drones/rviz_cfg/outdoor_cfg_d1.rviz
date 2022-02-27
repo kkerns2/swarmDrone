@@ -169,7 +169,7 @@ Visualization Manager:
       Draw Behind: true
       Enabled: true
       Name: Map
-      Topic: /map
+      Topic: /drone1/map
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -281,9 +281,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.559798002243042
+      Pitch: 0.7147979736328125
       Target Frame: drone1/base_link
-      Yaw: 3.2853548526763916
+      Yaw: 2.4753546714782715
     Saved: ~
 Window Geometry:
   Camera:

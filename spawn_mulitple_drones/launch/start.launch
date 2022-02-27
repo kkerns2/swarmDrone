@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <launch>
+
     <group ns="drone1">
         <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
             <arg name="name" value ="drone1"/>
             <arg name="tf_prefix" value="drone1"/>
             <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/>
-            <arg name="x" value="0.0"/>
-            <arg name="y" value="1.0"/>
+            <arg name="x" value="42.0"/>
+            <arg name="y" value="-40.0"/>
             <arg name="z" value="0.0"/>
         </include>
         
@@ -38,14 +39,14 @@
             <arg name="tf_prefix" value="drone2"/>
         </include>
     </group>
-    <!-->
+    
     <group ns="drone3">
         <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
             <arg name="name" value ="drone3"/>
             <arg name="tf_prefix" value="drone3"/>
             <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/>
-            <arg name="x" value="-6.0"/>
-            <arg name="y" value="1.0"/>
+            <arg name="x" value="-42.0"/>
+            <arg name="y" value="-40.0"/>
             <arg name="z" value="0.0"/>
         </include>
 
@@ -60,8 +61,8 @@
             <arg name="name" value ="drone4"/>
             <arg name="tf_prefix" value="drone4"/>
             <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/>
-            <arg name="x" value="-9.0"/>
-            <arg name="y" value="1.0"/>
+            <arg name="x" value="42.0"/>
+            <arg name="y" value="40.0"/>
             <arg name="z" value="0.0"/>
         </include>
 
@@ -71,6 +72,5 @@
         </include>
     </group>
 
-    <-->
-
+    
 </launch>

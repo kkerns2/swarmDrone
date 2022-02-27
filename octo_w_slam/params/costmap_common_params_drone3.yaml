@@ -1,5 +1,5 @@
 footprint: [[-0.45,-0.45],[-0.45, 0.45],[0.45, 0.45],[0.45, -0.45]]
-observation_sources: hokuyo_utm30lx_sensor kinect_sensor
+observation_sources: hokuyo_utm30lx_sensor 
 hokuyo_utm30lx_sensor:
   sensor_frame: drone3/laser0_frame
   data_type: LaserScan
@@ -8,15 +8,6 @@ hokuyo_utm30lx_sensor:
   clearing: true
   min_obstacle_height: 0.25
   max_obstacle_height: 0.35
-
-kinect_sensor:
-  sensor_frame: drone3/kinect_link
-  data_type: PointCloud
-  topic: /drone3/kinect/depth/points
-  marking: true
-  clearing: true
-  min_obstacle_height: 0.15
-  max_obstacle_height: 10.5
 
 inflation_layer:
   enabled:              true

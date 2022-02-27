@@ -1,5 +1,5 @@
 <launch>
-
+   
     <group ns="drone1">
         <!--
             1.Start SLAM for each drone
@@ -8,15 +8,15 @@
             4.Merge the maps
             5.Save the map via rosrun map_server map_saver -f ~/map
         -->
-        <include file="$(find spawn_mulitple_drones)/launch/start_slam.launch">
-            <arg name="tf_prefix" value="drone1"/>
-        </include>
-
-        <include file="$(find explorer)/launch/explorer.launch">
+        <include file="$(find explorer)/launch/start_slam.launch">
             <arg name="tf_prefix" value="drone1"/>
         </include>
 
         <include file="$(find explorer)/launch/move_base.launch">
+            <arg name="tf_prefix" value="drone1"/>
+        </include>
+
+        <include file="$(find explorer)/launch/explorer.launch">
             <arg name="tf_prefix" value="drone1"/>
         </include>
 
@@ -30,11 +30,7 @@
             4.Merge the maps
             5.Save the map via rosrun map_server map_saver -f ~/map
         -->
-        <include file="$(find spawn_mulitple_drones)/launch/start_slam.launch">
-            <arg name="tf_prefix" value="drone2"/>
-        </include>
-
-        <include file="$(find explorer)/launch/explorer.launch">
+        <include file="$(find explorer)/launch/start_slam.launch">
             <arg name="tf_prefix" value="drone2"/>
         </include>
 
@@ -42,7 +38,56 @@
             <arg name="tf_prefix" value="drone2"/>
         </include>
 
+        <include file="$(find explorer)/launch/explorer.launch">
+            <arg name="tf_prefix" value="drone2"/>
+        </include>
+
     </group>
+
+    <group ns="drone3">
+        <!--
+            1.Start SLAM for each drone
+            2.Start explorer for each drone
+            3.Start MoveBase for each drone
+            4.Merge the maps
+            5.Save the map via rosrun map_server map_saver -f ~/map
+        -->
+        <include file="$(find explorer)/launch/start_slam.launch">
+            <arg name="tf_prefix" value="drone3"/>
+        </include>
+
+        <include file="$(find explorer)/launch/move_base.launch">
+            <arg name="tf_prefix" value="drone3"/>
+        </include>
+
+        <include file="$(find explorer)/launch/explorer.launch">
+            <arg name="tf_prefix" value="drone3"/>
+        </include>
+
+    </group>
+
+    <group ns="drone4">
+        <!--
+            1.Start SLAM for each drone
+            2.Start explorer for each drone
+            3.Start MoveBase for each drone
+            4.Merge the maps
+            5.Save the map via rosrun map_server map_saver -f ~/map
+        -->
+        <include file="$(find explorer)/launch/start_slam.launch">
+            <arg name="tf_prefix" value="drone4"/>
+        </include>
+
+        <include file="$(find explorer)/launch/move_base.launch">
+            <arg name="tf_prefix" value="drone4"/>
+        </include>
+
+        <include file="$(find explorer)/launch/explorer.launch">
+            <arg name="tf_prefix" value="drone4"/>
+        </include>
+
+    </group>
+
 
     <!--Take drones drone maps and pipes them into a master map -->
     <include file="$(find explorer)/launch/multi_map_merge.launch"/>
