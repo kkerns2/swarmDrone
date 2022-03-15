@@ -13,6 +13,7 @@
     <arg name="d3" default="drone3"/>
     <arg name="d4" default="drone4"/>
 
+  <node pkg="nav_point_publisher" type="navPoint.py" name="navpoints_py" output="screen"/> 
 
 
 
