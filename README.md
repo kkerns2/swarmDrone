@@ -1,5 +1,6 @@
 # Swarm Package
 Senior Design for University of Central Florida. Sponsored By Lockheed Martin
+<br/>
 ## Navigation 
 ### Steps to run 
 ##### 1. Launch World Simulation with Four Drones into Environment 
@@ -15,9 +16,11 @@ src/swarm/launch/bash\ script/./takeoff.sh
 roslaunch swarm start_move.launch
 ```
 
+<br/>
 
 
 ## Autonomously Map the environment (SLAM):
+
 ### Steps to run 
 ##### 1. Launch World Simulation with Four Drones into Environment with Hector SLAM enabled
 ```console
