@@ -5,7 +5,7 @@ import rospy
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
-def movebase_client(coordinates):
+def movebase_client(x, y):
     #could make multiple clients to broadcast to multiple drones
     client = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
     client.wait_for_server()
@@ -13,8 +13,8 @@ def movebase_client(coordinates):
     goal = MoveBaseGoal()
     goal.target_pose.header.frame_id = "map"
     goal.target_pose.header.stamp = rospy.Time.now()
-    goal.target_pose.pose.position.x = coordinates[1][0]
-    goal.target_pose.pose.position.y = coordinates[1][1]
+    goal.target_pose.pose.position.x = x
+    goal.target_pose.pose.position.y = y
     goal.target_pose.pose.orientation.w = 1.0
 
 
@@ -29,7 +29,7 @@ def movebase_client(coordinates):
 
 if __name__=='__main__':
     #import the text files (x,y) coordinates.
-    with open('/home/ubuntu/catkin_ws/src/nav_point_publisher/waypoints.txt', 'r') as f:
+    with open('/home/mcp/catkin_ws/src/nav_point_publisher/waypoints.txt', 'r') as f:
         lines = f.readlines()
 
     #convert the strings to floats
@@ -41,10 +41,18 @@ if __name__=='__main__':
             coordinates[i][j] = float(coordinates[i][j])
 
     try:
+        #add coordinate logic here
         rospy.init_node('navPoint_py')
-        result = movebase_client(coordinates)
-        if result:
-            rospy.loginfo("Goal executed")
+        count = 0
+        while count < coordinates:
+            result = movebase_client(coordinates[count][0], coordinates[count][1])
+            if result:
+                rospy.loginfo("Goal executed")
+                count +=1
+            else:
+                rospy.loginfo("Something went wrong")
+                break
+
     except rospy.ROSInterruptException:
         rospy.loginfo("Nav Broadcast finished")
 
