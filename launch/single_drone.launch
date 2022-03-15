@@ -16,7 +16,7 @@
 
   <group if="$(arg slam)">
   	<!-- Spawn simulated quadrotor uav -->
-  	<include file="$(find swarm)/launch/spawn_quadrotor__slam.launch">
+  	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor__slam.launch">
   	    <arg name="name" value="$(arg drone_name)"/>
   	    <arg name="tf_prefix" value="$(arg drone_name)"/>
     	    <arg name="x" default="$(arg x)"/>
@@ -42,7 +42,7 @@
 
   <group unless="$(arg slam)">
   	<!-- Spawn simulated quadrotor uav -->
-  	<include file="$(find swarm)/launch/spawn_quadrotor_amcl.launch">
+  	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor_amcl.launch">
   	    <arg name="name" value="$(arg drone_name)"/>
   	    <arg name="tf_prefix" value="$(arg drone_name)"/>
     	<arg name="x" default="$(arg x)"/>
@@ -52,7 +52,7 @@
 	    <arg name="use_ground_truth_for_control" value="$(arg use_ground_truth_for_control)"/>
 	    <arg name="use_pose_estimation" value="$(arg use_pose_estimation)"/>
    	    <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_with_asus_with_hokuyo_utm30lx.gazebo.xacro"/> 
-   		<arg name="world_frame" default="map"/> 
+   		<arg name="world_frame" default="world"/> 
 	</include>
 	
 	<!-- Start rviz visualization with preset config -->
@@ -66,4 +66,5 @@
 	
    
 </launch>
+
 
