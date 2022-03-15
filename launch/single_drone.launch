@@ -25,7 +25,7 @@
 	    <arg name="use_ground_truth_for_tf" value="$(arg use_ground_truth_for_tf)"/>
 	    <arg name="use_ground_truth_for_control" value="$(arg use_ground_truth_for_control)"/>
 	    <arg name="use_pose_estimation" value="$(arg use_pose_estimation)"/>
-   	    <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_with_asus_with_hokuyo_utm30lx.gazebo.xacro"/> 
+   	    <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/> 
 	    <arg name="world_frame" default="world"/>
 	</include>
 	
@@ -51,7 +51,7 @@
 	    <arg name="use_ground_truth_for_tf" value="$(arg use_ground_truth_for_tf)"/>
 	    <arg name="use_ground_truth_for_control" value="$(arg use_ground_truth_for_control)"/>
 	    <arg name="use_pose_estimation" value="$(arg use_pose_estimation)"/>
-   	    <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_with_asus_with_hokuyo_utm30lx.gazebo.xacro"/> 
+   	    <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/> 
    		<arg name="world_frame" default="world"/> 
 	</include>
 	
