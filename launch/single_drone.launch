@@ -16,7 +16,7 @@
 
   <group if="$(arg slam)">
   	<!-- Spawn simulated quadrotor uav -->
-  	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor__slam.launch">
+  	<include file="$(find swarm)/launch/spawn_quadrotor__slam.launch">
   	    <arg name="name" value="$(arg drone_name)"/>
   	    <arg name="tf_prefix" value="$(arg drone_name)"/>
     	    <arg name="x" default="$(arg x)"/>
@@ -42,7 +42,7 @@
 
   <group unless="$(arg slam)">
   	<!-- Spawn simulated quadrotor uav -->
-  	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor_amcl.launch">
+  	<include file="$(find swarm)/launch/spawn_quadrotor_amcl.launch">
   	    <arg name="name" value="$(arg drone_name)"/>
   	    <arg name="tf_prefix" value="$(arg drone_name)"/>
     	<arg name="x" default="$(arg x)"/>
