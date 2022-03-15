@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+    <arg name="map_file" default="/home/mcp/catkin_ws/src/swarm/maps/drone_final.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
+        <param name="frame_id"  value="map"/>
+    </node>
+
+    <arg name="d1" default="drone1"/>
+    <arg name="d2" default="drone2"/>
+    <arg name="d3" default="drone3"/>
+    <arg name="d4" default="drone4"/>
+
+<!--
+    <node pkg="tf" type="static_transform_publisher" name="$(arg d1)_world_to_$(arg d1)_base_footprint_broadcaster"  args="0 0 0 0 0 0 /$(arg d1)/world /$(arg d1)/base_footprint 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="$(arg d2)_world_to_$(arg d2)_base_footprint_broadcaster"  args="0 0 0 0 0 0 /$(arg d2)/world /$(arg d2)/base_footprint 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="$(arg d3)_world_to_$(arg d3)_base_footprint_broadcaster"  args="0 0 0 0 0 0 /$(arg d3)/world /$(arg d3)/base_footprint 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="$(arg d4)_world_to_$(arg d4)_base_footprint_broadcaster"  args="0 0 0 0 0 0 /$(arg d4)/world /$(arg d4)/base_footprint 100"/>
+
+    <node pkg="tf" type="static_transform_publisher" name="map_to_$(arg d1)_world_broadcaster"  args="0 0 0 0 0 0 /map /$(arg d1)/world 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="map_to_$(arg d2)_world_broadcaster"  args="0 0 0 0 0 0 /map /$(arg d2)/world 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="map_to_$(arg d3)_world_broadcaster"  args="0 0 0 0 0 0 /map /$(arg d3)/world 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="map_to_$(arg d4)_world_broadcaster"  args="0 0 0 0 0 0 /map /$(arg d4)/world 100"/>
+-->
+</launch>

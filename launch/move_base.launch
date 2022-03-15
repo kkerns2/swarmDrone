@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <arg name="tf_prefix" default=""/>
+    <arg name="odom_frame_id"   default="$(arg tf_prefix)/world"/>
+    <arg name="base_frame_id"   default="$(arg tf_prefix)/base_footprint"/>
+    <arg name="global_frame_id" default="$(arg tf_prefix)/map"/>
+    <arg name="laser_topic" default="/$(arg tf_prefix)/scan" />
+    <arg name="odom_topic" default="/$(arg tf_prefix)/ground_truth/state" />
+
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find swarm)/param/costmap_common_params_$(arg tf_prefix).yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find swarm)/param/costmap_common_params_$(arg tf_prefix).yaml" command="load" ns="local_costmap" />   
+        <rosparam file="$(find swarm)/param/local_costmap_params_$(arg tf_prefix).yaml" command="load" />   
+        <rosparam file="$(find swarm)/param/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find swarm)/param/dwa_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find swarm)/param/move_base_params.yaml" command="load" />
+        <rosparam file="$(find swarm)/param/navfn_global_planner_params.yaml" command="load" />
+        
+        <!-- reset frame_id parameters using user input data -->
+        <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+        <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+        <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
+        <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+        <param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
+
+        <remap from="scan" to="$(arg laser_topic)"/>
+        <remap from="odom" to="$(arg odom_topic)"/> 
+    </node>
+    </launch>

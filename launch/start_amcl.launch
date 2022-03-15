@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+     <!-- AMCL   -->   
+    <include file="$(find swarm)/launch/d1_amcl.launch" />
+    
+    
+    <!--
+
+    <include file="$(find swarm)/launch/d2_amcl.launch" />
+    <include file="$(find swarm)/launch/d3_amcl.launch" />
+    <include file="$(find swarm)/launch/d4_amcl.launch" />
+    -->
+  
+</launch>

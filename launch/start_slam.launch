@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<launch>
+	<group ns="drone1">
+		<include file="$(find swarm)/launch/SLAM.launch">
+		    <arg name="tf_prefix" value="drone1"/>
+		</include>
+	</group> 
+	
+	<group ns="drone2">
+		<include file="$(find swarm)/launch/SLAM.launch">
+		    <arg name="tf_prefix" value="drone2"/>
+		</include>
+	</group> 
+	
+	<group ns="drone3">
+		<include file="$(find swarm)/launch/SLAM.launch">
+		    <arg name="tf_prefix" value="drone3"/>
+		</include>
+	</group> 
+	
+	<group ns="drone4">
+		<include file="$(find swarm)/launch/SLAM.launch">
+		    <arg name="tf_prefix" value="drone4"/>
+		</include>
+	</group> 
+
+    <!--Take drones drone maps and pipes them into a master map -->
+    <node pkg="tf" type="static_transform_publisher" name="world_to_drone1_tf_broadcaster"  args="0 0 0 0 0 0 /map /drone1/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_drone2_tf_broadcaster"  args="0 0 0 0 0 0 /map /drone2/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_drone3_tf_broadcaster"  args="0 0 0 0 0 0 /map /drone3/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_drone4_tf_broadcaster"  args="0 0 0 0 0 0 /map /drone4/map 100"/>
+
+
+</launch>
