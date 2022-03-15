@@ -3,7 +3,6 @@
 <launch>
   
   <arg name="tf_prefix" default="drone1"/>
-  <node pkg="tf" type="static_transform_publisher" name="map_to_odom_broadcaster" args="0 0 0 0 0 0 $(arg tf_prefix)/map $(arg tf_prefix)/world 100"/>
 
   <include file="$(find hector_mapping)/launch/mapping_default.launch">
     <arg name="base_frame" value="$(arg tf_prefix)/base_footprint"/>

@@ -43,15 +43,15 @@
         </include>
 
     </group>
-
+    <!--
     <group ns="drone3">
-        <!--
+        <
             1.Start SLAM for each drone
             2.Start explorer for each drone
             3.Start MoveBase for each drone
             4.Merge the maps
             5.Save the map via rosrun map_server map_saver -f ~/map
-        -->
+        >
         <include file="$(find explorer)/launch/start_slam.launch">
             <arg name="tf_prefix" value="drone3"/>
         </include>
@@ -65,15 +65,16 @@
         </include>
 
     </group>
-
-    <group ns="drone4">
-        <!--
+-->
+<!--    
+<group ns="drone4">
+        
             1.Start SLAM for each drone
             2.Start explorer for each drone
             3.Start MoveBase for each drone
             4.Merge the maps
             5.Save the map via rosrun map_server map_saver -f ~/map
-        -->
+        
         <include file="$(find explorer)/launch/start_slam.launch">
             <arg name="tf_prefix" value="drone4"/>
         </include>
@@ -87,9 +88,14 @@
         </include>
 
     </group>
+-->
 
+    <!--Take drones drone maps and pipes them into a master map
+    <include file="$(find explorer)/launch/multi_map_merge.launch"/--> 
 
-    <!--Take drones drone maps and pipes them into a master map -->
-    <include file="$(find explorer)/launch/multi_map_merge.launch"/>
+    <node pkg="tf" type="static_transform_publisher" name="drone1_map_to_drone1_world_tf_broadcaster"  args="0 0 0 0 0 0 /drone1/map /drone1/world 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="drone2_map_to_drone2_world_tf_broadcaster"  args="0 0 0 0 0 0 /drone2/map /drone2/world 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="drone3_map_to_drone3_world_tf_broadcaster"  args="0 0 0 0 0 0 /drone2/map /drone3/world 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="drone4_map_to_drone4_world_tf_broadcaster"  args="0 0 0 0 0 0 /drone2/map /drone4/world 100"/>
 
 </launch>
