@@ -9,7 +9,7 @@ roslaunch swarm world.launch slam:=false
 ```
 ##### 2. Launch Four Drones Mid-Air
 ```console
-src/swarm/launch/bash\ script/./takeoff.sh
+src/swarm/bash\ script/./takeoff.sh
 ```
 ##### 3. Enable Movebase & AMCL to allow the Four Drones to Navigate the Map
 ```console
