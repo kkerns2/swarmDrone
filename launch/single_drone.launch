@@ -55,8 +55,8 @@
    		<arg name="world_frame" default="world"/> 
 	</include>
 	
-	<!-- Start rviz visualization with preset config -->
- 	 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find swarm)/rviz/$(arg drone_name)_nav.rviz"/>
+	<!-- Start rviz visualization with preset config 
+ 	 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find swarm)/rviz/$(arg drone_name)_nav.rviz"/> -->
   </group>
 	  <!-- Takeoff for simulated quadrotor uav -->
   	<include file = "/home/mcp/catkin_ws/src/hector_quadrotor_noetic/takeoff_land/launch/takeoff_land.launch">
@@ -66,5 +66,4 @@
 	
    
 </launch>
-
 

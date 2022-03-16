@@ -42,5 +42,9 @@
 	           <arg name="slam" value="$(arg slam)"/> 
 		</include>
 	</group>
-             
+     
+       <group unless="$(arg slam)">
+<!-- Start rviz visualization with preset config -->
+ 	 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find swarm)/rviz/all_drone_nav.rviz"/>
+ 	   </group>
 </launch>
