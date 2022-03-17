@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="bb8">
+
+<!-- Starting Point --> 
+
+  <link name="base_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 -0.5" />
+      <mass value="40.0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0"/>
+
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0" />
+      <geometry>
+        <sphere radius="0.1"/> 
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0" />
+      <geometry>
+        <sphere radius="0.1"/>
+      </geometry>
+      <material name="orange">
+        <color rgba="1 0.5 0 1"/>
+      </material>    
+    </visual>
+  </link>
+  
+  
+<!-- First Step -->
+
+  <link name="base_rotation_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0." />
+      <mass value="1.0" />
+      <inertia ixx="1.225" ixy="0.0099" ixz="0.0062" iyy="1.2853" iyz="-0.0034" izz="0.987" />
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0" />
+      <geometry>
+	<sphere radius="0.1"/>        
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0" />
+      <geometry>
+        <sphere radius="0.1"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 .8 1"/>
+      </material>    
+    </visual>
+  </link>
+
+
+  <joint name="rotation_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+    <parent link="base_link" />
+    <child link="base_rotation_link" />
+    <axis xyz="0 0 1" />
+    <limit effort="18.85" lower="-1e+16" upper="1e+16" velocity="0.3" />
+  </joint>
+
+
+<!-- Second Step -->
+
+  <link name="base_direction_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0." />
+      <mass value="1.0" />
+      <inertia ixx="1.225" ixy="0.0099" ixz="0.0062" iyy="1.2853" iyz="-0.0034" izz="0.987" />
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0. 0." />
+      <geometry>
+        <sphere radius="0.35"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.0 -0.35"/>   	
+      <geometry>
+      	  <mesh filename="package://bb8/bb8_description/meshes/bb8/ball_bb8/ball.dae" scale="1 1 1"/>
+      </geometry>	
+    </visual>
+  </link>
+
+  <joint name="direction_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0." />
+    <parent link="base_rotation_link" />
+    <child link="base_direction_link" />
+    <axis xyz="1 0 0" />
+    <limit effort="18.85" velocity="27.4" />
+  </joint>
+
+
+<!-- Third Step -->
+
+  <link name="head_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+      <mass value="3.0" />
+      <inertia ixx="1.225" ixy="0.0099" ixz="0.0062" iyy="1.2853" iyz="-0.0034" izz="0.987" />
+    </inertial>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.0 0." />
+      <geometry>
+        <sphere radius="0.2"/>
+      </geometry>
+    </collision>
+    <visual>
+    
+    <origin rpy="0 0 3.14" xyz="0 0.0 -0.35" />
+    <geometry>
+      	  <mesh filename="package://bb8/bb8_description/meshes/bb8/head_bb8/head.dae" scale="1 1 1"/>
+    </geometry>  
+    </visual>
+  </link>
+
+  <joint name="head_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0." />
+    <parent link="base_rotation_link" />
+    <child link="head_link" />
+    <axis xyz="0 0 1" />
+    <limit effort="0.10" velocity="0.1" lower="-1e+16" upper="1e+16"/>
+  </joint>
+
+</robot>

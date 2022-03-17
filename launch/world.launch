@@ -5,20 +5,34 @@
   <!-- World File -->
   <arg name="world_file" default="$(find swarm)/worlds/urban.world"/>
   <arg name="slam"	default="false"/> 
+  <arg name="gui" default="true"/>
+  <arg name="args" default=""/>
+  <arg name="robot" default="bb8"/>
+  <arg name="debug" default="false"/>
+  <arg name="headless" default="false"/>
+  <arg name="pause" default="true"/>
 
-  <!-- Launch Gazebo World -->
+  <node name="gazebo" pkg="gazebo_ros" type="gzserver" args="$(arg world_file) $(arg args)" respawn="false" output="screen"/>
+  <!-- Keep true at least for Hector SLAM -->
+  <!-- Launch Gazebo World 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="use_sim_time" value="true"/> <!-- Keep true at least for Hector SLAM -->
+    <arg name="use_sim_time" value="true"/> 
     <arg name="debug" value="false"/>
     <arg name="gui" value="true" />
     <arg name="world_name" value="$(arg world_file)"/>
     <arg name="verbose" value="false" />
-  </include>
-
+  </include>-->
+ <!-- start gui -->
+  <group if="$(arg gui)">
+    <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
+  </group>
   <!-- Spawn simulated quadrotor uav -->
   <include file="$(find swarm)/launch/drones.launch">
     <arg name="slam" value="$(arg slam)"/> 
   </include>
  
+ <!-- Spawn bb8  -->
+  <include file="$(find bb8)/launch/main.launch">
+  </include>
 </launch>
 
