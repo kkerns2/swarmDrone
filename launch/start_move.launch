@@ -38,8 +38,8 @@
         <include file="$(find swarm)/launch/amcl.launch">
             <arg name="tf_prefix" value="drone2"/>
             <arg name="odom_frame_id" value="drone2/world"/> 
-            <arg name="initial_pose_x" value="-40"/>
-            <arg name="initial_pose_y" value="-42"/>
+            <arg name="initial_pose_x" value="-42"/>
+            <arg name="initial_pose_y" value="40"/>
         </include>
 
      <!--Move Base for drone2 -->
@@ -55,12 +55,12 @@
         <include file="$(find swarm)/launch/amcl.launch">
             <arg name="tf_prefix" value="drone3"/>
             <arg name="odom_frame_id" value="drone3/world"/> 
-            <arg name="initial_pose_x" value="-40"/>
-            <arg name="initial_pose_y" value="-42"/>
+            <arg name="initial_pose_x" value="120"/>
+            <arg name="initial_pose_y" value="-44"/>
         </include>
 
      <!--Move Base for drone3 -->
-     <group ns="drone1">
+     <group ns="drone3">
         <include file="$(find swarm)/launch/move_base_1.launch">
            <arg name="tf_prefix" value="drone3"/>
            <arg name="odom_frame_id" value="drone3/world"/>
@@ -72,8 +72,8 @@
         <include file="$(find swarm)/launch/amcl.launch">
             <arg name="tf_prefix" value="drone4"/>
             <arg name="odom_frame_id" value="drone4/world"/> 
-            <arg name="initial_pose_x" value="-40"/>
-            <arg name="initial_pose_y" value="-42"/>
+            <arg name="initial_pose_x" value="120"/>
+            <arg name="initial_pose_y" value="44"/>
         </include>
 
      <!--Move Base for drone4 -->
