@@ -6,7 +6,15 @@ import sys
 import torch
 from sensor_msgs.msg import Image
 
+
+drones = ['drone1', 'drone2', 'drone3', 'drone4']
+num_drones = len(drones)
+drone_iterator = None
+
+# num_drones = len(sys.argv) - 1
+
 drone_name = sys.argv[1] if len(sys.argv) == 2 else 'drone1'
+drone_name2 = 'drone2'
 
 # PREFERENCES
 box_thickness = 1       
@@ -22,6 +30,10 @@ model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
 # model.conf = 0.7
+
+model2 = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
+device2 = 'cuda' if torch.cuda.is_available() else 'cpu'
+model2.to(device2)
 
 
 
@@ -104,17 +116,54 @@ def callback(msg):
     # convert back rgb -> to brg for cv2 to display
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     # cv2.imshow('window', frame)
-    cv2.imshow(drone_name, frame)
-    cv2.waitKey(1)
+    # cv2.imshow(drone_name, frame)
+    cv2.imshow(drones[0], frame)
+    cv2.waitKey(0)
 
+def callback2(msg):
+    br = cv_bridge.CvBridge()
+    # rospy.loginfo("receiving video frame")
+    current_frame = br.imgmsg_to_cv2(msg, desired_encoding="bgr8")
+    # convert bgr -> rgb for image detector to process
+    frame = cv2.cvtColor(current_frame, cv2.COLOR_BGR2RGB)
+    # cv2.imshow('window', current_frame)
+
+    results = inference(frame, model2)
+    # print(results)
+    frame = plot_boxes(results, frame, model2)
+
+
+    # convert back rgb -> to brg for cv2 to display
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+    # cv2.imshow('window', frame)
+    # cv2.imshow(drone_name, frame)
+    cv2.imshow(drones[1], frame)
+    cv2.waitKey(0)
 
 def receive_message():
     rospy.init_node('follower', anonymous=True)
+    global drone_iterator
 
-    topic = f'{drone_name}/front_cam/camera/image'
-    sub = rospy.Subscriber(topic, Image, callback)
-    # rospy.Subscriber('/drone1/front_cam/camera/image', Image, callback)
+    drone_iterator = 0
+    drone_name = sys.argv
+
+    topic = f'{drones[0]}/front_cam/camera/image'
+    sub1 = rospy.Subscriber(topic, Image, callback)
+
+    topic = f'{drones[1]}/front_cam/camera/image'
+    sub2 = rospy.Subscriber(topic, Image, callback2)
+
+
+    topic = f'{drones[2]}/front_cam/camera/image'
+    # sub3 = rospy.Subscriber(topic, Image, callback)
+
+    topic = f'{drones[3]}/front_cam/camera/image'
+    # sub4 = rospy.Subscriber(topic, Image, callback)
+
+
     rospy.spin()
+        
+
 
 
     cv2.destroyAllWindows()

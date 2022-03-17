@@ -6,7 +6,15 @@ import sys
 import torch
 from sensor_msgs.msg import Image
 
+
+drones = ['drone1', 'drone2', 'drone3', 'drone4']
+num_drones = len(drones)
+drone_iterator = None
+
+# num_drones = len(sys.argv) - 1
+
 drone_name = sys.argv[1] if len(sys.argv) == 2 else 'drone1'
+drone_name2 = 'drone2'
 
 # PREFERENCES
 box_thickness = 1       
@@ -22,6 +30,8 @@ model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
 # model.conf = 0.7
+
+
 
 
 
@@ -104,17 +114,49 @@ def callback(msg):
     # convert back rgb -> to brg for cv2 to display
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     # cv2.imshow('window', frame)
-    cv2.imshow(drone_name, frame)
-    cv2.waitKey(1)
+    # cv2.imshow(drone_name, frame)
+    cv2.imshow(drones[drone_iterator], frame)
+    cv2.waitKey(0)
 
 
 def receive_message():
     rospy.init_node('follower', anonymous=True)
+    global drone_iterator
 
-    topic = f'{drone_name}/front_cam/camera/image'
+    drone_iterator = 0
+    drone_name = sys.argv
+
+    topic = f'{drones[drone_iterator]}/front_cam/camera/image'
     sub = rospy.Subscriber(topic, Image, callback)
+    drone_iterator += 1
+
     # rospy.Subscriber('/drone1/front_cam/camera/image', Image, callback)
-    rospy.spin()
+    # rospy.spin()
+    print(sub)
+
+    start = rospy.get_time()
+    while not rospy.core.is_shutdown():
+        # sub = rospy.Subscriber(topic, Image, callback)
+        current = rospy.get_time()
+
+        # condition to switch drone
+        if current - start > 0.2:
+            sub.unregister()
+
+            topic = f'{drones[drone_iterator]}/front_cam/camera/image'
+            sub = rospy.Subscriber(topic, Image, callback)            
+            drone_iterator += 1
+            print(topic)
+
+
+            if drone_iterator == num_drones:
+                drone_iterator = 0
+
+            start = rospy.get_time()
+        # rospy.rostime.wallsleep(0.5)
+        rospy.rostime.wallsleep(0.5)
+        
+
 
 
     cv2.destroyAllWindows()

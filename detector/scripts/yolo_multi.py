@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from concurrent.futures import thread
 import cv2, cv_bridge
 import os
 import rospy
@@ -7,17 +6,21 @@ import sys
 import torch
 import threading
 from sensor_msgs.msg import Image
+from time import sleep
 
-lock = threading.Lock()
+lock_yolo = threading.Lock()
+lock_frames = threading.Lock()
 
+
+num_Drones = len(sys.argv) - 1
 drone_names = []
-if len(sys.argv) > 1:
+frame_buffer = [None] * num_Drones
+if num_Drones >= 1:
     for arg in sys.argv[1:]:
         drone_names.append(arg)
 else:
     drone_names.append('drone1')
 
-# drone_name = sys.argv[1] if len(sys.argv) == 2 else 'drone1'
 
 # PREFERENCES
 box_thickness = 1       
@@ -57,7 +60,7 @@ def inference(frame, model):
     return cords, labels
 
 # remove model argument?
-def plot_boxes(results, frame, model):
+def plot_boxes(results, frame):
     cords, labels = results
     # x_shape, y_shape = frame.shape[1], frame.shape[0]
     for i, label in enumerate(labels):
@@ -69,15 +72,11 @@ def plot_boxes(results, frame, model):
         y1 = int(row[1])
         x2 = int(row[2])
         y2 = int(row[3])
-        # classes = model.names # Get the name of label index
-        # print(classes)
-
 
         # draw bounding box
         frame = cv2.rectangle(frame, \
                       (x1, y1), (x2, y2), \
                        bgr, box_thickness)
-
 
         # apply label over bounding box
         name = label[0]
@@ -95,44 +94,61 @@ def plot_boxes(results, frame, model):
                     label, \
                     (x1, y1-2), \
                     label_font, label_scale, bgr, label_thickness)
-
     return frame
 
 
-def callback(msg, drone_name):
+def callback(msg, args):
+    i = args
+
     br = cv_bridge.CvBridge()
-    # rospy.loginfo("receiving video frame")
     current_frame = br.imgmsg_to_cv2(msg, desired_encoding="bgr8")
     # convert bgr -> rgb for image detector to process
     frame = cv2.cvtColor(current_frame, cv2.COLOR_BGR2RGB)
-    # cv2.imshow('window', current_frame)
 
-    if lock.acquire(blocking=False) == False:
-        return
-
+    if lock_yolo.acquire(blocking=False) == False: return
     results = inference(frame, model)
-    lock.release()
+    lock_yolo.release()
+    
     # print(results)
-    frame = plot_boxes(results, frame, model)
-
+    frame = plot_boxes(results, frame)
 
     # convert back rgb -> to brg for cv2 to display
-    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+    lock_frames.acquire()
+    frame_buffer[i] = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+    lock_frames.release()
+
     # cv2.imshow('window', frame)
-    cv2.imshow(drone_name, frame)
-    cv2.waitKey(1)
+    # cv2.imshow(drone_name, frame)
+    # cv2.waitKey(1)
+
+
+def thread_imshow():
+    sleep(1)
+    while(True):
+        lock_frames.acquire()
+        for i, drone_name in enumerate(drone_names):
+            cv2.imshow(drone_name, frame_buffer[i])
+            cv2.waitKey(1)
+        lock_frames.release()
+        sleep(0.01)
+
 
 def receive_message():
     rospy.init_node('follower', anonymous=True)
 
     # subscribe to all the drones provided in argv
-    for drone_name in drone_names:
+    for i, drone_name in enumerate(drone_names):
+    # for drone_name in drone_names:
         topic = f'{drone_name}/front_cam/camera/image'
-        rospy.Subscriber(topic, Image, callback, (drone_name))
+        rospy.Subscriber(topic, Image, callback, (i))
 
     # topic = f'{drone_name}/front_cam/camera/image'
     # rospy.Subscriber(topic, Image, callback)
     # rospy.Subscriber('/drone1/front_cam/camera/image', Image, callback)
+
+    t = threading.Thread(target=thread_imshow)
+    t.start()
+
     rospy.spin()
 
     cv2.destroyAllWindows()
