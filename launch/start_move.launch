@@ -13,8 +13,11 @@
     <arg name="d3" default="drone3"/>
     <arg name="d4" default="drone4"/>
 
-  <node pkg="nav_point_publisher" type="navPoint.py" name="navpoints_py" output="screen"/> 
 
+  <node pkg="nav_point_publisher" type="drone1_client.py" name="drone1_client_py" output="screen"/> 
+  <node pkg="nav_point_publisher" type="drone2_client.py" name="drone2_client_py" output="screen"/> 
+  <node pkg="nav_point_publisher" type="drone3_client.py" name="drone3_client_py" output="screen"/> 
+  <node pkg="nav_point_publisher" type="drone4_client.py" name="drone4_client_py" output="screen"/> 
 
 
         <!--Call the navigation stack for drone1 -->
