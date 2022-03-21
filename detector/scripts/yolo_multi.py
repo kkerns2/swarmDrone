@@ -6,7 +6,6 @@ import sys
 import torch
 import threading
 from sensor_msgs.msg import Image
-from time import sleep
 
 lock_yolo = threading.Lock()
 lock_frames = threading.Lock()
@@ -20,6 +19,7 @@ if num_Drones >= 1:
         drone_names.append(arg)
 else:
     drone_names.append('drone1')
+    frame_buffer = [None] * 1
 
 
 # PREFERENCES
@@ -35,7 +35,7 @@ model_path = os.path.join(dirname, 'custom.pt')
 model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
-# model.conf = 0.7
+# model.conf = 0.9
 
 
 
@@ -59,7 +59,7 @@ def inference(frame, model):
     labels = np_results[:, -1:]
     return cords, labels
 
-# remove model argument?
+
 def plot_boxes(results, frame):
     cords, labels = results
     # x_shape, y_shape = frame.shape[1], frame.shape[0]
@@ -105,9 +105,9 @@ def callback(msg, args):
     # convert bgr -> rgb for image detector to process
     frame = cv2.cvtColor(current_frame, cv2.COLOR_BGR2RGB)
 
-    if lock_yolo.acquire(blocking=False) == False: return
+    # if lock_yolo.acquire() == False: return
     results = inference(frame, model)
-    lock_yolo.release()
+    # lock_yolo.release()
     
     # print(results)
     frame = plot_boxes(results, frame)
@@ -117,20 +117,18 @@ def callback(msg, args):
     frame_buffer[i] = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     lock_frames.release()
 
-    # cv2.imshow('window', frame)
-    # cv2.imshow(drone_name, frame)
-    # cv2.waitKey(1)
-
 
 def thread_imshow():
-    sleep(1)
-    while(True):
+    while(any(frame is None for frame in frame_buffer)):
+        rospy.sleep(1)
+
+    while(any(frame is not None for frame in frame_buffer)):
         lock_frames.acquire()
         for i, drone_name in enumerate(drone_names):
             cv2.imshow(drone_name, frame_buffer[i])
             cv2.waitKey(1)
         lock_frames.release()
-        sleep(0.01)
+        rospy.sleep(0.01)
 
 
 def receive_message():
@@ -142,15 +140,14 @@ def receive_message():
         topic = f'{drone_name}/front_cam/camera/image'
         rospy.Subscriber(topic, Image, callback, (i))
 
-    # topic = f'{drone_name}/front_cam/camera/image'
-    # rospy.Subscriber(topic, Image, callback)
-    # rospy.Subscriber('/drone1/front_cam/camera/image', Image, callback)
 
     t = threading.Thread(target=thread_imshow)
     t.start()
 
     rospy.spin()
-
+    lock_frames.acquire()
+    frame_buffer[0] = None
+    lock_frames.release()
     cv2.destroyAllWindows()
 
 
