@@ -10,7 +10,7 @@ def movebase_drone4_client(x, y):
     
     client4.wait_for_server()
     
-    client4.cancel_goal()
+    #client4.cancel_goal()
    
     goal4 = MoveBaseGoal()
    
@@ -58,10 +58,10 @@ if __name__=='__main__':
             drone4_result = movebase_drone4_client(drone4_coordinates[drone4_count][0], drone4_coordinates[drone4_count][1])
     
             if drone4_result:
-                rospy.loginfo("Drone 1: Goal executed")
+                rospy.loginfo("Drone 4: Goal executed")
                 drone4_count +=1
             else:
-                rospy.loginfo("Drone 1: Something went wrong")
+                rospy.loginfo("Drone 4: Something went wrong")
                 break
 
     except rospy.ROSInterruptException:

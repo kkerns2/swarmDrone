@@ -72,3 +72,4 @@
     <remap from="/move_base_simple/goal"                                           to="/$(arg tf_prefix)/move_base_simple/goal" />
     </node>
 </launch>
+

@@ -31,8 +31,8 @@
     <arg name="slam" value="$(arg slam)"/> 
   </include>
  
- <!-- Spawn bb8  -->
+ <!-- Spawn bb8  
   <include file="$(find bb8)/launch/main.launch">
-  </include>
+  </include>-->
 </launch>
 

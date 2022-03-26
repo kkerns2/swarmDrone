@@ -1,2 +1,3 @@
 TrajectoryPlannerROS:
-  holonomic_robot: true
+ holonomic_robot: true
+

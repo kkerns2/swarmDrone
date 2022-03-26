@@ -21,7 +21,7 @@ kinect_sensor:
 inflation_layer:
   enabled:              true
   cost_scaling_factor:  5.0  
-  inflation_radius:     0.6  
+  inflation_radius:     0.4  
 
 static_layer:
   enabled:              true

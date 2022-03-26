@@ -10,7 +10,7 @@ def movebase_drone1_client(x, y):
     
     client1.wait_for_server()
     
-    client1.cancel_goal()
+    #client1.cancel_goal()
    
     goal1 = MoveBaseGoal()
    
@@ -32,7 +32,6 @@ def movebase_drone1_client(x, y):
         rospy.logerr("Action server is not available")
         rospy.signal_shutdown("Action server is not available")
     else:
-        print('drone 1 working?')
         return client1.get_result()
 
 if __name__=='__main__':

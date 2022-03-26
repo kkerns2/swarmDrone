@@ -10,7 +10,7 @@ def movebase_drone2_client(x, y):
     
     client2.wait_for_server()
     
-    client2.cancel_goal()
+    #client2.cancel_goal()
    
     goal2 = MoveBaseGoal()
    
