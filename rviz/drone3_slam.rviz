@@ -5,25 +5,12 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
         - /TF1
         - /TF1/Tree1
-        - /TF1/Tree1/map1
-        - /TF1/Tree1/map1/drone1/map1
-        - /TF1/Tree1/map1/drone1/map1/drone1/world1
-        - /TF1/Tree1/map1/drone2/map1
-        - /TF1/Tree1/map1/drone2/map1/drone2/world1
-        - /TF1/Tree1/map1/drone3/map1
-        - /TF1/Tree1/map1/drone3/map1/drone3/world1
-        - /TF1/Tree1/map1/drone4/map1
-        - /TF1/Tree1/map1/drone4/map1/drone4/world1
-        - /LaserScan1
-        - /RobotModel1
-        - /MarkerArray1
         - /Global Costmap1/Map1
         - /Local Costmap1/Map1
-      Splitter Ratio: 0.8294117450714111
-    Tree Height: 527
+      Splitter Ratio: 0.5633987188339233
+    Tree Height: 441
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -79,15 +66,9 @@ Visualization Manager:
           Value: true
         drone1/base_stabilized:
           Value: true
-        drone1/camera_depth_frame:
+        drone1/front_cam_link:
           Value: true
-        drone1/camera_depth_optical_frame:
-          Value: true
-        drone1/camera_link:
-          Value: true
-        drone1/camera_rgb_frame:
-          Value: true
-        drone1/camera_rgb_optical_frame:
+        drone1/front_cam_optical_frame:
           Value: true
         drone1/laser0_frame:
           Value: true
@@ -105,15 +86,9 @@ Visualization Manager:
           Value: true
         drone2/base_stabilized:
           Value: true
-        drone2/camera_depth_frame:
+        drone2/front_cam_link:
           Value: true
-        drone2/camera_depth_optical_frame:
-          Value: true
-        drone2/camera_link:
-          Value: true
-        drone2/camera_rgb_frame:
-          Value: true
-        drone2/camera_rgb_optical_frame:
+        drone2/front_cam_optical_frame:
           Value: true
         drone2/laser0_frame:
           Value: true
@@ -131,15 +106,9 @@ Visualization Manager:
           Value: true
         drone3/base_stabilized:
           Value: true
-        drone3/camera_depth_frame:
+        drone3/front_cam_link:
           Value: true
-        drone3/camera_depth_optical_frame:
-          Value: true
-        drone3/camera_link:
-          Value: true
-        drone3/camera_rgb_frame:
-          Value: true
-        drone3/camera_rgb_optical_frame:
+        drone3/front_cam_optical_frame:
           Value: true
         drone3/laser0_frame:
           Value: true
@@ -157,15 +126,9 @@ Visualization Manager:
           Value: true
         drone4/base_stabilized:
           Value: true
-        drone4/camera_depth_frame:
+        drone4/front_cam_link:
           Value: true
-        drone4/camera_depth_optical_frame:
-          Value: true
-        drone4/camera_link:
-          Value: true
-        drone4/camera_rgb_frame:
-          Value: true
-        drone4/camera_rgb_optical_frame:
+        drone4/front_cam_optical_frame:
           Value: true
         drone4/laser0_frame:
           Value: true
@@ -194,13 +157,9 @@ Visualization Manager:
               drone1/base_footprint:
                 drone1/base_stabilized:
                   drone1/base_link:
-                    drone1/camera_link:
-                      drone1/camera_depth_frame:
-                        drone1/camera_depth_optical_frame:
-                          {}
-                      drone1/camera_rgb_frame:
-                        drone1/camera_rgb_optical_frame:
-                          {}
+                    drone1/front_cam_link:
+                      drone1/front_cam_optical_frame:
+                        {}
                     drone1/laser0_frame:
                       {}
                     drone1/sonar_link:
@@ -212,13 +171,9 @@ Visualization Manager:
               drone2/base_footprint:
                 drone2/base_stabilized:
                   drone2/base_link:
-                    drone2/camera_link:
-                      drone2/camera_depth_frame:
-                        drone2/camera_depth_optical_frame:
-                          {}
-                      drone2/camera_rgb_frame:
-                        drone2/camera_rgb_optical_frame:
-                          {}
+                    drone2/front_cam_link:
+                      drone2/front_cam_optical_frame:
+                        {}
                     drone2/laser0_frame:
                       {}
                     drone2/sonar_link:
@@ -230,13 +185,9 @@ Visualization Manager:
               drone3/base_footprint:
                 drone3/base_stabilized:
                   drone3/base_link:
-                    drone3/camera_link:
-                      drone3/camera_depth_frame:
-                        drone3/camera_depth_optical_frame:
-                          {}
-                      drone3/camera_rgb_frame:
-                        drone3/camera_rgb_optical_frame:
-                          {}
+                    drone3/front_cam_link:
+                      drone3/front_cam_optical_frame:
+                        {}
                     drone3/laser0_frame:
                       {}
                     drone3/sonar_link:
@@ -248,13 +199,9 @@ Visualization Manager:
               drone4/base_footprint:
                 drone4/base_stabilized:
                   drone4/base_link:
-                    drone4/camera_link:
-                      drone4/camera_depth_frame:
-                        drone4/camera_depth_optical_frame:
-                          {}
-                      drone4/camera_rgb_frame:
-                        drone4/camera_rgb_optical_frame:
-                          {}
+                    drone4/front_cam_link:
+                      drone4/front_cam_optical_frame:
+                        {}
                     drone4/laser0_frame:
                       {}
                     drone4/sonar_link:
@@ -314,24 +261,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_depth_frame:
+        front_cam_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        camera_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        camera_rgb_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_rgb_optical_frame:
+        front_cam_optical_frame:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -353,10 +287,10 @@ Visualization Manager:
       Visual Enabled: true
     - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /drone1/explore/frontiers
+      Marker Topic: /drone3/explore/frontiers
       Name: MarkerArray
       Namespaces:
-        {}
+        frontiers: true
       Queue Size: 100
       Value: true
     - Class: rviz/Group
@@ -371,7 +305,7 @@ Visualization Manager:
           Unreliable: false
           Use Timestamp: false
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Global Costmap
     - Class: rviz/Group
       Displays:
@@ -385,7 +319,7 @@ Visualization Manager:
           Unreliable: false
           Use Timestamp: false
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Local Costmap
   Enabled: true
   Global Options:
@@ -414,7 +348,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -10.91573429107666
+      Angle: -11.025745391845703
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -424,26 +358,26 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: -2.893108367919922
+      Scale: -3.526212215423584
       Target Frame: map
-      X: 18.776277542114258
-      Y: -50.503780364990234
+      X: 25.25750732421875
+      Y: 10.191946029663086
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: false
-  Height: 1016
-  Hide Left Dock: false
+    collapsed: true
+  Height: 478
+  Hide Left Dock: true
   Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd00000004000000000000023d0000035ffc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d0000024c000000c900fffffffb0000001e0054006f006f006c002000500072006f0070006500720074006900650073010000028f0000010d0000005c00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d00610067006500000001a2000001900000000000000000fb0000000c00430061006d006500720061000000026d000001450000000000000000000000010000010f0000035cfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0056006900650077007300000000430000035c000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073800000039fc0100000002fb0000000800540069006d0065010000000000000738000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000004f50000035f00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000002ff00000145fc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073000000003d000000db000000c900fffffffb0000001e0054006f006f006c002000500072006f0070006500720074006900650073000000011e000000640000005c00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d00610067006500000001a2000001900000000000000000fb0000000c00430061006d006500720061000000026d000001450000000000000000000000010000010f0000035cfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0056006900650077007300000000430000035c000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000036100000039fc0100000002fb0000000800540069006d0065010000000000000361000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000003610000014500000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
     collapsed: false
   Tool Properties:
-    collapsed: false
+    collapsed: true
   Views:
     collapsed: true
-  Width: 1848
-  X: 1992
+  Width: 865
+  X: 72
   Y: 27

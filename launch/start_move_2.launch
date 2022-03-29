@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+ 
+
+
+  <node pkg="nav_point_publisher" type="drone3_client.py" name="drone3_client_py" output="screen"/> 
+  <node pkg="nav_point_publisher" type="drone4_client.py" name="drone4_client_py" output="screen"/> 
+ 
+</launch>
+
+
+ 

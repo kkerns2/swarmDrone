@@ -19,7 +19,7 @@
   	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor__slam.launch">
   	    <arg name="name" value="$(arg drone_name)"/>
   	    <arg name="tf_prefix" value="$(arg drone_name)"/>
-    	    <arg name="x" default="$(arg x)"/>
+    	<arg name="x" default="$(arg x)"/>
 	    <arg name="y" default="$(arg y)"/>
 	    <arg name="z" default="$(arg z)"/> 
 	    <arg name="use_ground_truth_for_tf" value="$(arg use_ground_truth_for_tf)"/>

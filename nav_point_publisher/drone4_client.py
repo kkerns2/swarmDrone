@@ -36,7 +36,7 @@ def movebase_drone4_client(x, y):
 
 if __name__=='__main__':
 
-    with open('/home/mcp/catkin_ws/src/nav_point_publisher/drone4_waypoints.txt', 'r') as f:
+    with open('/home/mcp/catkin_ws/src/nav_point_publisher/waypoints_d4.txt', 'r') as f:
         lines_4 = f.readlines()
 
     drone4_coordinates = []

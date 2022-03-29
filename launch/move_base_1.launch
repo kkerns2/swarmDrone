@@ -16,7 +16,9 @@
         <rosparam file="$(find swarm)/param/costmap_common_params_$(arg tf_prefix).yaml" command="load" ns="local_costmap" />   
         <rosparam file="$(find swarm)/param/local_costmap_params_$(arg tf_prefix).yaml" command="load" />   
         <rosparam file="$(find swarm)/param/global_costmap_params_$(arg tf_prefix).yaml" command="load" />
+        <!-- 
         <rosparam file="$(find swarm)/param/dwa_local_planner_params.yaml" command="load" />
+        -->
         <rosparam file="$(find swarm)/param/move_base_params.yaml" command="load" />
 
         <!-- reset frame_id parameters using user input data -->
