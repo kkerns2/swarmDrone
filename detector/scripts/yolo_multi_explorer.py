@@ -107,33 +107,27 @@ def plot_boxes(results, frame):
 
         if row[4] > 0.95:
             
-            if(drone_names[0] == 'drone1'): #if drone1 or drone2
-                
-                os.system('rosnode kill /drone1_client_py /drone2_client_py')
+            os.system('rosnode kill /drone1/explore /drone2/explore /drone3/explore /drone4/explore /map_merge')
 
+            cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
+            cancel_msg_1 = GoalID()
+            cancel_pub_1.publish(cancel_msg_1)
 
-                cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_1 = GoalID()
-                cancel_pub_1.publish(cancel_msg_1)
+            cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
+            cancel_msg_2 = GoalID()
+            cancel_pub_2.publish(cancel_msg_2)
 
-                cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_2 = GoalID()
-                cancel_pub_2.publish(cancel_msg_2)
+            cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
+            cancel_msg_3 = GoalID()
+            cancel_pub_3.publish(cancel_msg_3)
 
-                rospy.loginfo("Confidence: " + str(row[4]))
+            cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
+            cancel_msg_4 = GoalID()
+            cancel_pub_4.publish(cancel_msg_4)
 
-            elif(drone_names[0] == 'drone3'):
-                os.system('rosnode kill /drone3_client_py /drone4_client_py')
+            rospy.loginfo("Confidence: " + str(row[4]))
 
-                cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_3 = GoalID()
-                cancel_pub_3.publish(cancel_msg_3)
-
-                cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_4 = GoalID()
-                cancel_pub_4.publish(cancel_msg_4)
-
-                rospy.loginfo("Confidence: " + str(row[4]))
+            
 
 
     return frame
