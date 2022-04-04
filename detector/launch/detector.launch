@@ -1,0 +1,3 @@
+<launch>
+  <node name="detector" pkg="detector" type="detect.py" output="screen" args="--weights custom.pt"/>
+</launch>

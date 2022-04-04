@@ -139,23 +139,22 @@
       </plugin>
     </sensor>
   </gazebo>
-</robot>
 
-  <!-- imu 
+  <!-- imu -->
   <gazebo>
     <plugin name="gazebo_ros_imu_controller" filename="libgazebo_ros_imu.so">
       <robotNamespace>/bb8/</robotNamespace>
       <topicName>imu/data</topicName>
       <serviceName>imu/service</serviceName>
       <bodyName>base_link</bodyName>
-     
+      <!-- <frameId>base_link</frameId> -->
       <gaussianNoise>0</gaussianNoise>
       <rpyOffsets>0 0 0</rpyOffsets>
       <updateRate>50.0</updateRate>
       <alwaysOn>true</alwaysOn>
       <gaussianNoise>0</gaussianNoise>
     </plugin>
-  </gazebo>-->
+  </gazebo>
 
   <!-- gazebo reference="base_link">
     <sensor name="imu_sensor" type="imu">
@@ -190,3 +189,4 @@
   </gazebo-->
 
 
+</robot>
