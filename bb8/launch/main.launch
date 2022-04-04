@@ -6,13 +6,19 @@
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="pause" default="true"/>
-  <arg name="x" default="0.0" />
-  <arg name="y" default="0.0" />
-  <arg name="z" default="0.5" />
 
-
+  <!-- Start Gazebo with a blank world, gazebo_ros is the gazebo program searching for it -->
+ 
+<!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="/home/mcp/catkin_ws/src/gazebo_models_worlds_collection/worlds/small_city.world"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg pause)"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>-->
+  
   <!-- Find <package>/launch.xml -->
-  <include file="$(find bb8)/launch/include/bb8.launch.xml">
-  </include>
+  <include file="$(find bb8)/launch/include/bb8.launch.xml"/>
 
 </launch>

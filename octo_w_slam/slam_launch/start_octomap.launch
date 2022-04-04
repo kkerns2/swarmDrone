@@ -1,0 +1,19 @@
+<launch>
+
+    <!--Assests for the kinect needed for octomapping -->
+    <include file="$(find freenect_launch)/launch/freenect_tf_prefix.launch">
+        <arg name="tf_prefix" value="drone1"/>
+        <arg name="depth_registration" value="true"/>
+    </include>
+    
+    <include file="$(find octo_w_slam)/slam_launch/octomap_init.launch">
+        <arg name="tf_prefix" value="drone1"/>
+    </include>
+    
+    <!--Hector Slam -->
+    <include file="$(find spawn_mulitple_drones)/launch/start_slam.launch"/>
+
+    <!--Gmapping -->
+    <!--include file="$(find octo_w_slam)/slam_launch/gmapping.launch"/-->
+
+</launch>
