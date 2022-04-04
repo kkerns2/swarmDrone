@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <arg name="tf_prefix" default=""/>
+    <arg name="odom_frame_id"   default="$(arg tf_prefix)/world"/>
+    <arg name="base_frame_id"   default="$(arg tf_prefix)/base_footprint"/>
+    <arg name="global_frame_id" default="map"/>
+    <arg name="odom_topic" default="/$(arg tf_prefix)/world" />
+    <arg name="laser_topic" default="/scan" />
+ 
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base_$(arg tf_prefix)" output="screen">
+    
+        <rosparam file="$(find swarm)/param/base_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find swarm)/param/costmap_common_params_$(arg tf_prefix).yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find swarm)/param/costmap_common_params_$(arg tf_prefix).yaml" command="load" ns="local_costmap" />   
+        <rosparam file="$(find swarm)/param/local_costmap_params_$(arg tf_prefix).yaml" command="load" />   
+        <rosparam file="$(find swarm)/param/global_costmap_params_$(arg tf_prefix).yaml" command="load" />
+        <!-- 
+        <rosparam file="$(find swarm)/param/dwa_local_planner_params.yaml" command="load" />
+        -->
+        <rosparam file="$(find swarm)/param/move_base_params.yaml" command="load" />
+
+        <!-- reset frame_id parameters using user input data -->
+        <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+        <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+        <param name="local_costmap/global_frame" value="$(arg global_frame_id)"/>
+        <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+        <!--<param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
+        -->
+        <remap from="scan" to="$(arg laser_topic)"/>
+        <remap from="odom" to="$(arg odom_topic)"/> 
+        <remap from="map" to="/map"/>
+        
+    <remap from="/move_base/TrajectoryPlannerROS/global_plan"	                   to="/$(arg tf_prefix)/move_base/TrajectoryPlannerROS/global_plan" />
+    <remap from="/move_base/TrajectoryPlannerROS/local_plan"                       to="/$(arg tf_prefix)/move_base/TrajectoryPlannerROS/local_plan" />
+    <remap from="/move_base/global_costmap/costmap"                                to="/$(arg tf_prefix)/move_base/global_costmap/costmap" />
+    <remap from="/move_base/global_costmap/costmap_updates"                        to="/$(arg tf_prefix)/move_base/global_costmap/costmap_updates" />
+    <remap from="/move_base/local_costmap/costmap"                                 to="/$(arg tf_prefix)/move_base/local_costmap/costmap" />
+    <remap from="/move_base/local_costmap/costmap_updates"                         to="/$(arg tf_prefix)/move_base/local_costmap/costmap_updates" />
+    <remap from="/move_base/local_costmap/footprint"                               to="/$(arg tf_prefix)/move_base/local_costmap/footprint" />
+
+    <remap from="/move_base/GlobalPlanner/parameter_descriptions"                  to="/$(arg tf_prefix)/move_base/GlobalPlanner/parameter_descriptions" />
+    <remap from="/move_base/GlobalPlanner/parameter_updates"                       to="/$(arg tf_prefix)/move_base/GlobalPlanner/parameter_updates" />
+    <remap from="/move_base/GlobalPlanner/plan"                                    to="/$(arg tf_prefix)/move_base/GlobalPlanner/plan" />
+    <remap from="/move_base/GlobalPlanner/potential"                               to="/$(arg tf_prefix)/move_base/GlobalPlanner/potential" />
+    <remap from="/move_base/TrajectoryPlannerROS/obstacles"                        to="/$(arg tf_prefix)/move_base/TrajectoryPlannerROS/obstacles" />
+    <remap from="/move_base/TrajectoryPlannerROS/parameter_descriptions"           to="/$(arg tf_prefix)/move_base/TrajectoryPlannerROS/parameter_descriptions" />
+    <remap from="/move_base/TrajectoryPlannerROS/parameter_updates"                to="/$(arg tf_prefix)/move_base/TrajectoryPlannerROS/parameter_updates" />
+    <remap from="/move_base/cancel"                                                to="/$(arg tf_prefix)/move_base/cancel" />
+    <remap from="/move_base/current_goal"                                          to="/$(arg tf_prefix)/move_base/current_goal" />
+    <remap from="/move_base/feedback"                                              to="/$(arg tf_prefix)/move_base/feedback" />
+    <remap from="/move_base/global_costmap/footprint"                              to="/$(arg tf_prefix)/move_base/global_costmap/footprint" />
+    <remap from="/move_base/global_costmap/inflation_layer/parameter_descriptions" to="/$(arg tf_prefix)/move_base/global_costmap/inflation_layer/parameter_descriptions" />
+    <remap from="/move_base/global_costmap/inflation_layer/parameter_updates"      to="/$(arg tf_prefix)/move_base/global_costmap/inflation_layer/parameter_updates" />
+    <remap from="/move_base/global_costmap/obstacle_layer/clearing_endpoints"      to="/$(arg tf_prefix)/move_base/global_costmap/obstacle_layer/clearing_endpoints" />
+    <remap from="/move_base/global_costmap/obstacle_layer/parameter_descriptions"  to="/$(arg tf_prefix)/move_base/global_costmap/obstacle_layer/parameter_descriptions" />
+    <remap from="/move_base/global_costmap/obstacle_layer/parameter_updates"       to="/$(arg tf_prefix)/move_base/global_costmap/obstacle_layer/parameter_updates" />
+    <remap from="/move_base/global_costmap/parameter_descriptions"                 to="/$(arg tf_prefix)/move_base/global_costmap/parameter_descriptions" />
+    <remap from="/move_base/global_costmap/parameter_updates"                      to="/$(arg tf_prefix)/move_base/global_costmap/parameter_updates" />
+    <remap from="/move_base/global_costmap/static_layer/parameter_descriptions"    to="/$(arg tf_prefix)/move_base/global_costmap/static_layer/parameter_descriptions" />
+    <remap from="/move_base/global_costmap/static_layer/parameter_updates"         to="/$(arg tf_prefix)/move_base/global_costmap/static_layer/parameter_updates" />
+    <remap from="/move_base/goal"                                                  to="/$(arg tf_prefix)/move_base/goal" />
+    <remap from="/move_base/local_costmap/obstacle_layer/parameter_descriptions"   to="/$(arg tf_prefix)/move_base/local_costmap/obstacle_layer/parameter_descriptions" />
+    <remap from="/move_base/local_costmap/obstacle_layer/parameter_updates"        to="/$(arg tf_prefix)/move_base/local_costmap/obstacle_layer/parameter_updates" />
+    <remap from="/move_base/local_costmap/parameter_descriptions"                  to="/$(arg tf_prefix)/move_base/local_costmap/parameter_descriptions" />
+    <remap from="/move_base/local_costmap/parameter_updates"                       to="/$(arg tf_prefix)/move_base/local_costmap/parameter_updates" />
+    <remap from="/move_base/local_costmap/static_layer/parameter_descriptions"     to="/$(arg tf_prefix)/move_base/local_costmap/static_layer/parameter_descriptions" />
+    <remap from="/move_base/local_costmap/static_layer/parameter_updates"          to="/$(arg tf_prefix)/move_base/local_costmap/static_layer/parameter_updates" />
+    <remap from="/move_base/parameter_descriptions"                                to="/$(arg tf_prefix)/move_base/parameter_descriptions" />
+    <remap from="/move_base/parameter_updates"                                     to="/$(arg tf_prefix)/move_base/parameter_updates" />
+    <remap from="/move_base/result"                                                to="/$(arg tf_prefix)/move_base/result" />
+    <remap from="/move_base/status"                                                to="/$(arg tf_prefix)/move_base/status" />
+    <remap from="/move_base_simple/goal"                                           to="/$(arg tf_prefix)/move_base_simple/goal" />
+    </node>
+</launch>
+

@@ -1,9 +1,0 @@
-<launch>
-
-    <group ns = "drone1">
-        <include file="$(find rtab_slam)/launch/autono_map.launch">
-            <arg name="tf_prefix" value="drone1"/>
-        </include>
-
-    </group>
-</launch>
