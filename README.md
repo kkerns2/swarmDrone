@@ -16,15 +16,23 @@ roslaunch bb8 main.launch
 ```console
 src/swarm/launch/bash\ script/./takeoff.sh
 ```
-##### 4. Enable Movebase & Explore Frontiers to allow the Drones to Navigate around the Map autonomously 
+##### 4. Launch first instance of YOLOv5 for drone1 and drone2
+```console
+rosrun detector yolo_multi.py drone1 drone2
+```
+##### 5. Launch second instance of YOLOv5 for drone3 and drone4
+```console
+rosrun detector yolo_multi.py drone3 drone4
+```
+##### 6. Enable Movebase & Explore Frontiers to allow the Drones to Navigate around the Map autonomously 
 ```console
 roslaunch swarm start_frontier.launch
 ```
-##### 5. Reset Hector SLAM
+##### 7. Reset Hector SLAM
 ```console
 src/swarm/launch/bash\ script/./reset_scan.sh
 ```
-##### 6. Once you're satisfied with the completed map, saved the map 
+##### 8. Once you're satisfied with the completed map, saved the map 
 ```console
 rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone1/map ~/catkin_ws/src/swarm/maps/drone1_map
 ```
@@ -52,11 +60,11 @@ roslaunch bb8 main.launch
 ```console
 src/swarm/bash\ script/./takeoff.sh
 ```
-##### 4. Launch first instane of YOLOv5 for drone1 and drone2
+##### 4. Launch first instance of YOLOv5 for drone1 and drone2
 ```console
 rosrun detector yolo_multi.py drone1 drone2
 ```
-##### 5. Launch first instane of YOLOv5 for drone3 and drone4
+##### 5. Launch second instance of YOLOv5 for drone3 and drone4
 ```console
 rosrun detector yolo_multi.py drone3 drone4
 ```
