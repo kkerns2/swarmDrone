@@ -1,6 +1,6 @@
 # Swarm Package
 Senior Design for University of Central Florida. Sponsored By Lockheed Martin
-
+<br>
 ## Phase 1: Autonomously Map the environment (SLAM):
 
 ### Steps to run 
@@ -37,7 +37,7 @@ rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone3/map ~/catkin_ws/
 ```console
 rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/src/swarm/maps/drone4_map
 ```
-<br/>
+
 ## Phase 2: Navigation 
 ### Steps to run 
 ##### 1. Launch World Simulation with Four Drones into Environment 
@@ -64,5 +64,4 @@ rosrun detector yolo_multi.py drone3 drone4
 ```console
 roslaunch swarm start_move.launch
 ```
-
 <br/>
