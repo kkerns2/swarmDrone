@@ -38,7 +38,7 @@ label_thickness = 1
 
 # load model
 dirname = os.path.dirname(__file__)
-model_path = os.path.join(dirname, 'custom.pt')
+model_path = os.path.join(dirname, 'YOLOv5.pt')
 model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
