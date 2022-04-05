@@ -12,11 +12,11 @@ from actionlib_msgs.msg import GoalID
 import subprocess
 import signal
 from geometry_msgs.msg import PoseWithCovarianceStamped   
+import random 
 
 lock_yolo = threading.Lock()
 lock_frames = threading.Lock()
 
-drone_paused = False 
 
 num_Drones = len(sys.argv) - 1
 drone_names = []
@@ -60,6 +60,29 @@ leader_d3 = False
 leader_d4 = False
 
 firstTime = 0 
+
+rand_list = [-6, -5, -4 ,-3, -2, 2, 3, 4, 5, 6]
+
+buffer1 =random.choice(rand_list)
+
+rand_list.remove(buffer1)
+
+buffer2 = random.choice(rand_list)
+
+rand_list.remove(buffer2)
+
+buffer3 = random.choice(rand_list)
+
+rand_list.remove(buffer3)
+
+buffer4 = random.choice(rand_list)
+
+rand_list.remove(buffer4)
+
+# buffer1 = random.randint(2, 4)
+# buffer2 = random.randint(2, 4)
+# buffer3 = random.randint(-4, -2)
+# buffer4 = random.randint(-4, -2)
 
 def retrieve_positions(msg):
     global drone_x
@@ -111,10 +134,7 @@ def inference(frame, model):
     return cords, labels
 
 def plot_boxes(results, frame, drone_name):
-    global child_1
-    global child_2
-    global drone_paused 
-
+    
     cords, labels = results
     # x_shape, y_shape = frame.shape[1], frame.shape[0]
     for i, label in enumerate(labels):
@@ -161,6 +181,11 @@ def plot_boxes(results, frame, drone_name):
             global drone_orien_z
             global drone_orien_w
             
+            global buffer1
+            global buffer2
+            global buffer3
+            global buffer4
+            
             global drone_flag
             
             global leader_d1 
@@ -177,6 +202,8 @@ def plot_boxes(results, frame, drone_name):
                 firstTime = 1
                 leader_d1 = True
 
+                if(firstTime):
+                    os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
                 # Set all 4 drones to cancel their goals: 
                 
                 # Drone 1 goal cancel
@@ -206,7 +233,7 @@ def plot_boxes(results, frame, drone_name):
                 client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
 
                 # Cancel all 3 drones                    
-                # client_1.cancel_goal()
+                client_1.cancel_goal()
                 client_2.cancel_goal()
                 client_3.cancel_goal()
                 client_4.cancel_goal()
@@ -224,8 +251,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_4 = MoveBaseGoal()
 
                 goal_2.target_pose.header.frame_id = 'map' 
-                goal_2.target_pose.pose.position.x = drone_x +  5.0
-                goal_2.target_pose.pose.position.y = drone_y + 5.0
+                goal_2.target_pose.pose.position.x = drone_x +  buffer1
+                goal_2.target_pose.pose.position.y = drone_y + buffer2
                 goal_2.target_pose.pose.position.z = drone_z 
                 goal_2.target_pose.pose.orientation.x = drone_orien_x
                 goal_2.target_pose.pose.orientation.y = drone_orien_y
@@ -233,8 +260,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_2.target_pose.pose.orientation.w = drone_orien_w
 
                 goal_3.target_pose.header.frame_id = 'map' 
-                goal_3.target_pose.pose.position.x = drone_x -  5.0
-                goal_3.target_pose.pose.position.y = drone_y -  5.0
+                goal_3.target_pose.pose.position.x = drone_x + buffer2
+                goal_3.target_pose.pose.position.y = drone_y + buffer3
                 goal_3.target_pose.pose.position.z = drone_z 
                 goal_3.target_pose.pose.orientation.x = drone_orien_x
                 goal_3.target_pose.pose.orientation.y = drone_orien_y
@@ -242,8 +269,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_3.target_pose.pose.orientation.w = drone_orien_w
 
                 goal_4.target_pose.header.frame_id = 'map' 
-                goal_4.target_pose.pose.position.x = drone_x - 7.0
-                goal_4.target_pose.pose.position.y = drone_y - 7.0
+                goal_4.target_pose.pose.position.x = drone_x + buffer3
+                goal_4.target_pose.pose.position.y = drone_y + buffer4
                 goal_4.target_pose.pose.position.z = drone_z 
                 goal_4.target_pose.pose.orientation.x = drone_orien_x
                 goal_4.target_pose.pose.orientation.y = drone_orien_y
@@ -261,6 +288,9 @@ def plot_boxes(results, frame, drone_name):
 
                 firstTime = 1
                 leader_d2 = True
+
+                if(firstTime):
+                    os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
 
                 # Set all 4 drones to cancel their goals: 
                 
@@ -309,8 +339,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_4 = MoveBaseGoal()
 
                 goal_1.target_pose.header.frame_id = 'map' 
-                goal_1.target_pose.pose.position.x = drone_x +  5.0
-                goal_1.target_pose.pose.position.y = drone_y +  5.0
+                goal_1.target_pose.pose.position.x = drone_x + buffer1
+                goal_1.target_pose.pose.position.y = drone_y + buffer4
                 goal_1.target_pose.pose.position.z = drone_z 
                 goal_1.target_pose.pose.orientation.x = drone_orien_x
                 goal_1.target_pose.pose.orientation.y = drone_orien_y
@@ -318,8 +348,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_1.target_pose.pose.orientation.w = drone_orien_w
 
                 goal_3.target_pose.header.frame_id = 'map' 
-                goal_3.target_pose.pose.position.x = drone_x -  5.0
-                goal_3.target_pose.pose.position.y = drone_y -  5.0
+                goal_3.target_pose.pose.position.x = drone_x + buffer2
+                goal_3.target_pose.pose.position.y = drone_y + buffer3
                 goal_3.target_pose.pose.position.z = drone_z 
                 goal_3.target_pose.pose.orientation.x = drone_orien_x
                 goal_3.target_pose.pose.orientation.y = drone_orien_y
@@ -327,8 +357,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_3.target_pose.pose.orientation.w = drone_orien_w
 
                 goal_4.target_pose.header.frame_id = 'map' 
-                goal_4.target_pose.pose.position.x = drone_x - 7.0
-                goal_4.target_pose.pose.position.y = drone_y - 7.0
+                goal_4.target_pose.pose.position.x = drone_x + buffer4
+                goal_4.target_pose.pose.position.y = drone_y + buffer1
                 goal_4.target_pose.pose.position.z = drone_z 
                 goal_4.target_pose.pose.orientation.x = drone_orien_x
                 goal_4.target_pose.pose.orientation.y = drone_orien_y
@@ -347,6 +377,9 @@ def plot_boxes(results, frame, drone_name):
                 firstTime = 1
                 leader_d3 = True
                 # Set all 4 drones to cancel their goals: 
+                
+                if(firstTime):
+                    os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
                 
                 # Drone 1 goal cancel
                 cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
@@ -393,8 +426,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_4 = MoveBaseGoal()
 
                 goal_1.target_pose.header.frame_id = 'map' 
-                goal_1.target_pose.pose.position.x = drone_x + 5.0
-                goal_1.target_pose.pose.position.y = drone_y +  5.0
+                goal_1.target_pose.pose.position.x = drone_x + buffer1
+                goal_1.target_pose.pose.position.y = drone_y + buffer2
                 goal_1.target_pose.pose.position.z = drone_z 
                 goal_1.target_pose.pose.orientation.x = drone_orien_x
                 goal_1.target_pose.pose.orientation.y = drone_orien_y
@@ -402,8 +435,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_1.target_pose.pose.orientation.w = drone_orien_w
 
                 goal_2.target_pose.header.frame_id = 'map' 
-                goal_2.target_pose.pose.position.x = drone_x -  5.0
-                goal_2.target_pose.pose.position.y = drone_y -  5.0
+                goal_2.target_pose.pose.position.x = drone_x + buffer3
+                goal_2.target_pose.pose.position.y = drone_y + buffer2
                 goal_2.target_pose.pose.position.z = drone_z 
                 goal_2.target_pose.pose.orientation.x = drone_orien_x
                 goal_2.target_pose.pose.orientation.y = drone_orien_y
@@ -411,8 +444,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_2.target_pose.pose.orientation.w = drone_orien_w
 
                 goal_4.target_pose.header.frame_id = 'map' 
-                goal_4.target_pose.pose.position.x = drone_x - 7.0
-                goal_4.target_pose.pose.position.y = drone_y - 7.0
+                goal_4.target_pose.pose.position.x = drone_x + buffer4
+                goal_4.target_pose.pose.position.y = drone_y + buffer1
                 goal_4.target_pose.pose.position.z = drone_z 
                 goal_4.target_pose.pose.orientation.x = drone_orien_x
                 goal_4.target_pose.pose.orientation.y = drone_orien_y
@@ -427,6 +460,9 @@ def plot_boxes(results, frame, drone_name):
             elif((drone_name == 'drone4' and firstTime == 0) or (leader_d4 == True)):
                 print('Drone 4 Spooted BB8!')
                 print('ld4', leader_d4)
+
+                if(firstTime):
+                    os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
 
                 # Flag for true                  
                 firstTime = 1
@@ -479,8 +515,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_3 = MoveBaseGoal()
                 
                 goal_1.target_pose.header.frame_id = 'map' 
-                goal_1.target_pose.pose.position.x = drone_x + 5.0
-                goal_1.target_pose.pose.position.y = drone_y + 5.0
+                goal_1.target_pose.pose.position.x = drone_x + buffer2
+                goal_1.target_pose.pose.position.y = drone_y + buffer1
                 goal_1.target_pose.pose.position.z = drone_z 
                 goal_1.target_pose.pose.orientation.x = drone_orien_x
                 goal_1.target_pose.pose.orientation.y = drone_orien_y
@@ -488,8 +524,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_1.target_pose.pose.orientation.w = drone_orien_w
 
                 goal_2.target_pose.header.frame_id = 'map' 
-                goal_2.target_pose.pose.position.x = drone_x - 5.0
-                goal_2.target_pose.pose.position.y = drone_y - 5.0
+                goal_2.target_pose.pose.position.x = drone_x + buffer4
+                goal_2.target_pose.pose.position.y = drone_y + buffer2
                 goal_2.target_pose.pose.position.z = drone_z 
                 goal_2.target_pose.pose.orientation.x = drone_orien_x
                 goal_2.target_pose.pose.orientation.y = drone_orien_y
@@ -497,8 +533,8 @@ def plot_boxes(results, frame, drone_name):
                 goal_2.target_pose.pose.orientation.w = drone_orien_w
 
                 goal_3.target_pose.header.frame_id = 'map' 
-                goal_3.target_pose.pose.position.x = drone_x - 7.0
-                goal_3.target_pose.pose.position.y = drone_y - 7.0
+                goal_3.target_pose.pose.position.x = drone_x + buffer3
+                goal_3.target_pose.pose.position.y = drone_y + buffer2
                 goal_3.target_pose.pose.position.z = drone_z 
                 goal_3.target_pose.pose.orientation.x = drone_orien_x
                 goal_3.target_pose.pose.orientation.y = drone_orien_y
