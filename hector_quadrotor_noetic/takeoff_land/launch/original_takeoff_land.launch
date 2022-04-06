@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<launch>
-
-    <node pkg="takeoff_land" type="takeoff_land_code.py" name="takeoff_land" output="screen">
-        <remap from="/takeoff" to="/takeoff"/>
-        <remap from="/land" to="/land"/>
-        <remap from="/cmd_vel" to="/cmd_vel"/>
-    </node>
-</launch>
