@@ -80,7 +80,8 @@ roslaunch swarm start_move.launch
 ```
 <br/>
 
-# Newcomers, running the SwarmDrone Package for the FIRST TIME: 
+# Requirements
+## Newcomers, running the SwarmDrone Package for the FIRST TIME: 
 
 ## Install ROS and Environment
 ```
@@ -131,7 +132,8 @@ catkin build
 
 # clone gazebo models and repo
 cd ~/catkin_ws/src/
+git clone https://github.com/ros-geographic-info/unique_identifier.git
+git clone https://github.com/ros-geographic-info/geographic_info.git
 git clone https://github.com/kkerns2/swarmDrone.git
-
 ```
 
