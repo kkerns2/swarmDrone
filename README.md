@@ -6,7 +6,7 @@ simulated in Gazebo and implemented in ROS Noetic.
 
 # Requirements: 
 
-## Install ROS and Environment:
+## A. Install ROS and Environment:
 ```
 # enable repo
 sudo add-apt-repository universe
@@ -44,7 +44,7 @@ source ~/.bashrc
 . /usr/share/gazebo/setup.sh
 ```
 
-## Set up workspace:
+## B. Set up workspace:
 ```
 # Create catkin_ws
 cd ~/
@@ -60,42 +60,42 @@ git clone https://github.com/ros-geographic-info/geographic_info.git
 git clone https://github.com/kkerns2/swarmDrone.git
 ```
 
-## Files that need to be changed: 
+## C. Files that need to be changed: 
 - If your workspace isn't named **catkin_ws**, changed the following: 
 
-### 1. Go to swarmDrone/bash_script and modify the following files:
-<ul>
-    <li>drone1_reset.sh</li>
-    <li>drone2_reset.sh</li>
-    <li>drone3_reset.sh</li>
-    <li>drone4_reset.sh</li>
-    <li>drone1_takeoff.sh</li>
-    <li>drone2_takeoff.sh</li>
-    <li>drone3_takeoff.sh</li>
-    <li>drone4_takeoff.sh</li>
-</ul>
+    ### 1. Go to swarmDrone/bash_script and modify the following files:
+    <ul>
+        <li>drone1_reset.sh</li>
+        <li>drone2_reset.sh</li>
+        <li>drone3_reset.sh</li>
+        <li>drone4_reset.sh</li>
+        <li>drone1_takeoff.sh</li>
+        <li>drone2_takeoff.sh</li>
+        <li>drone3_takeoff.sh</li>
+        <li>drone4_takeoff.sh</li>
+    </ul>
 
-#### Change this line with the name of your current workspace
-```
-Before:                                       After:
-source ~/catkin_ws/devel/setup.bash     ->  source ~/name_of_your_workspace/devel/setup.bash 
-```
+    #### Change this line with the name of your current workspace
+    ```
+    Before:                                       After:
+    source ~/catkin_ws/devel/setup.bash     ->  source ~/name_of_your_workspace/devel/setup.bash 
+    ```
 
-### 2. Go to swarmDrone/swarm/scripts/ and modify the following files:
-<ul>
-    <li>drone1_client.py</li>
-    <li>drone2_client.py</li>
-    <li>drone3_client.py</li>
-    <li>drone4_client.py</li>
-</ul>
+    ### 2. Go to swarmDrone/swarm/scripts/ and modify the following files:
+    <ul>
+        <li>drone1_client.py</li>
+        <li>drone2_client.py</li>
+        <li>drone3_client.py</li>
+        <li>drone4_client.py</li>
+    </ul>
 
-#### Change this line with the name of your current workspace
-```
-Before:                                                                                   After:
-with open('/home/mcp/catkin_ws/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:    ->    with open('/home/mcp/name_of_your_workspace/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:
-```
+    #### Change this line with the name of your current workspace
+    ```
+    Before:                                                                                   After:
+    with open('/home/mcp/catkin_ws/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:    ->    with open('/home/mcp/name_of_your_workspace/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:
+    ```
 
-## Move the bash_script folder where your src folder resides:
+## D. Move the bash_script folder where your src folder resides:
 
 ```
 catkin_ws/
