@@ -83,7 +83,7 @@ Take all the contents inside swarmDrone and insert it into the src folder, and d
     source ~/catkin_ws/devel/setup.bash     ->  source ~/name_of_your_workspace/devel/setup.bash 
     ```
 
-    ### 2. Go to swarmDrone/swarm/scripts/ and modify the following files:
+    ### 2. Go to ~/catkin_ws/src/swarm/scripts/ and modify the following files:
     <ul>
         <li>drone1_client.py</li>
         <li>drone2_client.py</li>
