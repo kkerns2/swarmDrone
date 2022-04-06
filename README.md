@@ -1,89 +1,12 @@
 # SwarmDrone Package
 Senior Design for University of Central Florida. Sponsored By Lockheed Martin
 
-Implements a drone swarm consisting of 4-5 drones.  Incorporates path planning algorithms and object detection.  The swarm traverses an urban environment
+- Implements a drone swarm consisting of 4-5 drones.  Incorporates path planning algorithms and object detection.  The swarm traverses an urban environment
 simulated in Gazebo and implemented in ROS Noetic.  
-<br>
-# Steps to run the SwarmDrone Package
 
-## Phase 1: Autonomously Map the environment (SLAM):
+# Requirements: 
 
-### Steps to run 
-##### 1. Launch World Simulation with Four Drones into Environment with Hector SLAM enabled
-```console
-roslaunch swarm world.launch slam:=true
-```
-##### 2. Launch bb8 into the world (arg x and y is for the spawn location of bb8)
-```console
-roslaunch bb8 main.launch
-```
-##### 3. Launch Four Drones Mid-Air
-```console
-cd bash_script/
-```
-```console
-./takeoff.sh
-```
-##### 4. Reset Hector SLAM
-```console
-cd bash_script/
-```
-```console
-./reset_scan.sh
-```
-##### 5. Launch YOLOv5 for object detection of bb8 for drone1, drone2, drone3 and drone4
-```console
-rosrun swarm yolo_slam.py drone1 drone2 drone3 drone4
-```
-##### 6. Enable Movebase & Explore Frontiers to allow the Drones to Navigate around the Map autonomously 
-```console
-roslaunch swarm start_frontier.launch
-```
-##### 7. Once you're satisfied with the completed map, saved the map 
-```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone1/map ~/catkin_ws/src/swarm/maps/drone1_map
-```
-```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone2/map ~/catkin_ws/src/swarm/maps/drone2_map
-```
-```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone3/map ~/catkin_ws/src/swarm/maps/drone3_map
-```
-```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/src/swarm/maps/drone4_map
-```
-
-## Phase 2: Navigation 
-### Steps to run 
-##### 1. Launch World Simulation with Four Drones into Environment 
-```console
-roslaunch swarm world.launch slam:=false
-```
-##### 2. Launch bb8 into the world (arg x and y is for the spawn location of bb8)
-```console
-roslaunch bb8 main.launch
-```
-##### 3. Launch Four Drones Mid-Air
-```console
-cd bash_script/
-```
-```console
-./takeoff.sh
-```
-##### 4. Launch YOLOv5 for object detection of bb8 for drone1, drone2, drone3 and drone4
-```console
-rosrun swarm yolo_nav.py drone1 drone2 drone3 drone4
-```
-##### 5. Enable Movebase & AMCL to allow the Four Drones to Navigate the Map
-```console
-roslaunch swarm start_move.launch
-```
-<br/>
-
-# Requirements
-## Newcomers, running the SwarmDrone Package for the FIRST TIME: 
-
-## Install ROS and Environment
+## Install ROS and Environment:
 ```
 # enable repo
 sudo add-apt-repository universe
@@ -121,7 +44,7 @@ source ~/.bashrc
 . /usr/share/gazebo/setup.sh
 ```
 
-## Set up workspace
+## Set up workspace:
 ```
 # Create catkin_ws
 cd ~/
@@ -136,4 +59,118 @@ git clone https://github.com/ros-geographic-info/unique_identifier.git
 git clone https://github.com/ros-geographic-info/geographic_info.git
 git clone https://github.com/kkerns2/swarmDrone.git
 ```
+
+## Files that need to be changed: 
+- If your workspace isn't named **catkin_ws**, changed the following: 
+
+### 1. Go to swarmDrone/bash_script and modify the following files:
+<ul>
+    <li>drone1_reset.sh</li>
+    <li>drone2_reset.sh</li>
+    <li>drone3_reset.sh</li>
+    <li>drone4_reset.sh</li>
+    <li>drone1_takeoff.sh</li>
+    <li>drone2_takeoff.sh</li>
+    <li>drone3_takeoff.sh</li>
+    <li>drone4_takeoff.sh</li>
+</ul>
+
+#### Change this line with the name of your current workspace, if you name your workspace to catkin_ws (if you follow the steps above), skip this step
+```
+Before:                                       After:
+source ~/catkin_ws/devel/setup.bash     ->  source ~/name_of_your_workspace/devel/setup.bash 
+```
+
+### 2. Go to swarmDrone/swarm/scripts/ and modify the following files:
+<ul>
+    <li>drone1_client.py</li>
+    <li>drone2_client.py</li>
+    <li>drone3_client.py</li>
+    <li>drone4_client.py</li>
+</ul>
+
+#### Change this line with the name of your current workspace, if you name your workspace to catkin_ws (if you follow the steps above), skip this step
+```
+Before:                                                                                   After:
+with open('/home/mcp/catkin_ws/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:    ->    with open('/home/mcp/name_of_your_workspace/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:
+```
+<br>
+
+# Steps to run the SwarmDrone Package:
+
+## Phase 1: Autonomously Map the environment (SLAM):
+
+### Steps to run 
+##### 1. Launch World Simulation with Four Drones into Environment with Hector SLAM enabled:
+```console
+roslaunch swarm world.launch slam:=true
+```
+##### 2. Launch bb8 into the world (arg x and y is for the spawn location of bb8):
+```console
+roslaunch bb8 main.launch
+```
+##### 3. Launch Four Drones Mid-Air:
+```console
+cd bash_script/
+```
+```console
+./takeoff.sh
+```
+##### 4. Reset Hector SLAM:
+```console
+cd bash_script/
+```
+```console
+./reset_scan.sh
+```
+##### 5. Launch YOLOv5 for object detection of bb8 for drone1, drone2, drone3 and drone4:
+```console
+rosrun swarm yolo_slam.py drone1 drone2 drone3 drone4
+```
+##### 6. Enable Movebase & Explore Frontiers to allow the Drones to Navigate around the Map autonomously: 
+```console
+roslaunch swarm start_frontier.launch
+```
+##### 7. Once you're satisfied with the completed map, saved the map: 
+```console
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone1/map ~/catkin_ws/src/swarm/maps/drone1_map
+```
+```console
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone2/map ~/catkin_ws/src/swarm/maps/drone2_map
+```
+```console
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone3/map ~/catkin_ws/src/swarm/maps/drone3_map
+```
+```console
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/src/swarm/maps/drone4_map
+```
+
+## Phase 2: Navigation 
+### Steps to run 
+##### 1. Launch World Simulation with Four Drones into Environment: 
+```console
+roslaunch swarm world.launch slam:=false
+```
+##### 2. Launch bb8 into the world (arg x and y is for the spawn location of bb8):
+```console
+roslaunch bb8 main.launch
+```
+##### 3. Launch Four Drones Mid-Air:
+```console
+cd bash_script/
+```
+```console
+./takeoff.sh
+```
+##### 4. Launch YOLOv5 for object detection of bb8 for drone1, drone2, drone3 and drone4:
+```console
+rosrun swarm yolo_nav.py drone1 drone2 drone3 drone4
+```
+##### 5. Enable Movebase & AMCL to allow the Four Drones to Navigate the Map:
+```console
+roslaunch swarm start_move.launch
+```
+<br/>
+
+
 
