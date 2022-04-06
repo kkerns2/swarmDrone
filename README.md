@@ -8,7 +8,7 @@ Senior Design for University of Central Florida. Sponsored By Lockheed Martin
 ```console
 roslaunch swarm world.launch slam:=true
 ```
-##### 2. Launch BB8 into the world (arg x and y is for the spawn location of BB8)
+##### 2. Launch bb8 into the world (arg x and y is for the spawn location of bb8)
 ```console
 roslaunch bb8 main.launch
 ```
@@ -19,20 +19,20 @@ cd bash_script/
 ```console
 ./takeoff.sh
 ```
-##### 4. Launch first instance of YOLOv5 for drone1 and drone2
-```console
-rosrun detector yolo_slam.py drone1 drone2
-```
-##### 5. Enable Movebase & Explore Frontiers to allow the Drones to Navigate around the Map autonomously 
-```console
-roslaunch swarm start_frontier.launch
-```
-##### 6. Reset Hector SLAM
+##### 4. Reset Hector SLAM
 ```console
 cd bash_script/
 ```
 ```console
 ./reset_scan.sh
+```
+##### 5. Launch YOLOv5 for object detection of bb8 for drone1, drone2, drone3 and drone4
+```console
+rosrun swarm yolo_slam.py drone1 drone2 drone3 drone4
+```
+##### 6. Enable Movebase & Explore Frontiers to allow the Drones to Navigate around the Map autonomously 
+```console
+roslaunch swarm start_frontier.launch
 ```
 ##### 7. Once you're satisfied with the completed map, saved the map 
 ```console
@@ -54,23 +54,22 @@ rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/
 ```console
 roslaunch swarm world.launch slam:=false
 ```
-##### 2. Launch BB8 into the world (arg x and y is for the spawn location of BB8)
+##### 2. Launch bb8 into the world (arg x and y is for the spawn location of bb8)
 ```console
 roslaunch bb8 main.launch
 ```
 ##### 3. Launch Four Drones Mid-Air
 ```console
-src/swarm/bash\ script/./takeoff.sh
+cd bash_script/
 ```
-##### 4. Launch first instance of YOLOv5 for drone1 and drone2
 ```console
-rosrun detector yolo_multi.py drone1 drone2
+./takeoff.sh
 ```
-##### 5. Launch second instance of YOLOv5 for drone3 and drone4
+##### 4. Launch YOLOv5 for object detection of bb8 for drone1, drone2, drone3 and drone4
 ```console
-rosrun detector yolo_multi.py drone3 drone4
+rosrun swarm yolo_nav.py drone1 drone2 drone3 drone4
 ```
-##### 6. Enable Movebase & AMCL to allow the Four Drones to Navigate the Map
+##### 5. Enable Movebase & AMCL to allow the Four Drones to Navigate the Map
 ```console
 roslaunch swarm start_move.launch
 ```
