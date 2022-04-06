@@ -1,0 +1,55 @@
+<launch>
+
+    <arg name="d1" default="drone1"/>
+    <arg name="d2" default="drone2"/>
+    <arg name="d3" default="drone3"/>
+    <arg name="d4" default="drone4"/>
+
+    <group ns="$(arg d1)/map_merge">
+        <param name="init_pose_x"   value="42"/>
+        <param name="init_pose_y"   value="-40"/>
+        <param name="init_pose_z"   value="1"/>
+        <param name="init_pose_yaw" value="0"  />
+      </group>
+
+    <group ns="$(arg d2)/map_merge">
+      <param name="init_pose_x"   value="-42"/>
+      <param name="init_pose_y"   value="40"/>
+      <param name="init_pose_z"   value="1"/>
+      <param name="init_pose_yaw" value="0"  />
+    </group>
+
+    <group ns="$(arg d3)/map_merge">
+      <param name="init_pose_x"   value="-42"/>
+      <param name="init_pose_y"   value="-40"/>
+      <param name="init_pose_z"   value="1"/>
+      <param name="init_pose_yaw" value="0"  />
+    </group>
+
+    <group ns="$(arg d4)/map_merge">
+      <param name="init_pose_x"   value="42"/>
+      <param name="init_pose_y"   value="40"/>
+      <param name="init_pose_z"   value="1"/>
+      <param name="init_pose_yaw" value="0"  />
+    </group>
+
+    <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
+      <param name="robot_map_topic" value="map"/>
+      <param name="robot_namespace" value="drone"/>
+      <param name="merged_map_topic" value="map"/>
+      <param name="world_frame" value="world"/>
+      <param name="known_init_poses" value="true"/>
+      <param name="merging_rate" value="6.0"/>
+      <param name="discovery_rate" value="0.1"/>
+      <param name="estimation_rate" value="0.2"/>
+      <param name="estimation_confidence" value="2.0"/>
+    </node>
+
+
+    <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg d1)_tf_broadcaster"  args="0 0 0 0 0 0 /map /$(arg d1)/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg d2)_tf_broadcaster"  args="0 0 0 0 0 0 /map /$(arg d2)/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg d3)_tf_broadcaster"  args="0 0 0 0 0 0 /map /$(arg d3)/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg d4)_tf_broadcaster"  args="0 0 0 0 0 0 /map /$(arg d4)/map 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="world_to_map_tf_broadcaster"  args="0 0 0 0 0 0 /world /map 100"/>
+
+</launch>
