@@ -36,7 +36,7 @@ def movebase_drone3_client(x, y):
 
 if __name__=='__main__':
 
-    with open('/home/mcp/testing_ws/src/swarm/waypoints/waypoints_d3.txt', 'r') as f:
+    with open('/home/mcp/catkin_ws/src/swarm/waypoints/waypoints_d3.txt', 'r') as f:
         lines_3 = f.readlines()
 
     drone3_coordinates = []
