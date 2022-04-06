@@ -75,7 +75,7 @@ git clone https://github.com/kkerns2/swarmDrone.git
     <li>drone4_takeoff.sh</li>
 </ul>
 
-#### Change this line with the name of your current workspace, if you name your workspace to catkin_ws (if you follow the steps above), skip this step
+#### Change this line with the name of your current workspace
 ```
 Before:                                       After:
 source ~/catkin_ws/devel/setup.bash     ->  source ~/name_of_your_workspace/devel/setup.bash 
@@ -89,7 +89,7 @@ source ~/catkin_ws/devel/setup.bash     ->  source ~/name_of_your_workspace/deve
     <li>drone4_client.py</li>
 </ul>
 
-#### Change this line with the name of your current workspace, if you name your workspace to catkin_ws (if you follow the steps above), skip this step
+#### Change this line with the name of your current workspace
 ```
 Before:                                                                                   After:
 with open('/home/mcp/catkin_ws/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:    ->    with open('/home/mcp/name_of_your_workspace/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:
