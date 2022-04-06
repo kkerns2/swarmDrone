@@ -183,6 +183,3 @@ rosrun swarm yolo_nav.py drone1 drone2 drone3 drone4
 roslaunch swarm start_move.launch
 ```
 <br/>
-
-
-
