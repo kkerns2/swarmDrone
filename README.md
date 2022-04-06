@@ -94,6 +94,18 @@ source ~/catkin_ws/devel/setup.bash     ->  source ~/name_of_your_workspace/deve
 Before:                                                                                   After:
 with open('/home/mcp/catkin_ws/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:    ->    with open('/home/mcp/name_of_your_workspace/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:
 ```
+
+## Move the bash_script folder where your src folder resides:
+
+```
+catkin_ws/
+    -> bash_script
+       build
+       devel
+       logs
+       src
+          swarmDrone
+```
 <br>
 
 # Steps to run the SwarmDrone Package:
