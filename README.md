@@ -145,17 +145,50 @@ roslaunch swarm start_frontier.launch
 ```
 ##### 7. Once you're satisfied with the completed map, saved the map: 
 ```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone1/map ~/catkin_ws/src/swarm/maps/drone1_map
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone1/map ~/catkin_ws/src/swarmDrone/swarm/maps/drone1_map
 ```
 ```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone2/map ~/catkin_ws/src/swarm/maps/drone2_map
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone2/map ~/catkin_ws/src/swarmDrone/swarm/maps/drone2_map
 ```
 ```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone3/map ~/catkin_ws/src/swarm/maps/drone3_map
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone3/map ~/catkin_ws/src/swarmDrone/swarm/maps/drone3_map
 ```
 ```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/src/swarm/maps/drone4_map
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/src/swarmDrone/swarm/maps/drone4_map
 ```
+
+##### 8. Merge your Saved Maps into a Master Map:
+
+##### Copy the following maps and insert it into: catkin_ws/src/swarmDrone/Map-Merge-Tool/build/figure/
+  <ul>
+        <li>drone1_map.pgm</li>
+        <li>drone2_map.pgm</li>
+        <li>drone3_map.pgm</li>
+        <li>drone4_map.pgm</li>
+  </ul>
+
+```console
+cd src/swarmDrone/Map-Merge-Tool/build/
+```
+
+```console
+./DisplayImage figure/drone1_map.pgm figure/drone2_map.pgm figure/drone_a.pgm
+```
+
+```console
+./DisplayImage figure/drone3_map.pgm figure/drone4_map.pgm figure/drone_b.pgm
+```
+```console
+./DisplayImage figure/drone_a.pgm figure/drone_b.pgm result/urban_result.pgm
+```
+### Copy drone1_map.yaml and rename it to urban_result.yaml, and leave it in catkin_ws/src/swarmDrone/swarm/maps
+
+#### Edit urban_result.yaml on line 1: 
+```
+Before:                     After
+image: drone1_map.pgm       image: urban_result.pgm
+```
+### Copy urban_result.pgm and insert it in catkin_ws/src/swarmDrone/swarm/maps
 
 ## Phase 2: Navigation 
 ### Steps to run 
