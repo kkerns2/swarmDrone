@@ -58,12 +58,14 @@ cd ~/catkin_ws/src/
 git clone https://github.com/ros-geographic-info/unique_identifier.git
 git clone https://github.com/ros-geographic-info/geographic_info.git
 git clone https://github.com/kkerns2/swarmDrone.git
+
+Take all the contents inside swarmDrone and insert it into the src folder, and delete the swarmDrone folder
 ```
 
 ## C. Files that need to be changed: 
 - If your workspace isn't named **catkin_ws**, changed the following: 
 
-    ### 1. Go to swarmDrone/bash_script and modify the following files:
+    ### 1. Go to ~/catkin_ws/src/bash_script and modify the following files:
     <ul>
         <li>drone1_reset.sh</li>
         <li>drone2_reset.sh</li>
@@ -104,7 +106,6 @@ catkin_ws/
        devel
        logs
        src
-          swarmDrone
 ```
 <br>
 
@@ -145,21 +146,21 @@ roslaunch swarm start_frontier.launch
 ```
 ##### 7. Once you're satisfied with the completed map, saved the map: 
 ```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone1/map ~/catkin_ws/src/swarmDrone/swarm/maps/drone1_map
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone1/map ~/catkin_ws/src/swarm/maps/drone1_map
 ```
 ```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone2/map ~/catkin_ws/src/swarmDrone/swarm/maps/drone2_map
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone2/map ~/catkin_ws/src/swarm/maps/drone2_map
 ```
 ```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone3/map ~/catkin_ws/src/swarmDrone/swarm/maps/drone3_map
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone3/map ~/catkin_ws/src/swarm/maps/drone3_map
 ```
 ```console
-rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/src/swarmDrone/swarm/maps/drone4_map
+rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/src/swarm/maps/drone4_map
 ```
 
 ##### 8. Merge your Saved Maps into a Master Map:
 
-##### Copy the following maps and insert it into: catkin_ws/src/swarmDrone/Map-Merge-Tool/build/figure/
+##### Copy the following maps and insert it into: catkin_ws/src/Map-Merge-Tool/build/figure/
   <ul>
         <li>drone1_map.pgm</li>
         <li>drone2_map.pgm</li>
@@ -168,7 +169,7 @@ rosrun map_server map_saver --occ 100 --free 10 -f map:=/drone4/map ~/catkin_ws/
   </ul>
 
 ```console
-cd src/swarmDrone/Map-Merge-Tool/build/
+cd src/Map-Merge-Tool/build/
 ```
 
 ```console
@@ -181,14 +182,22 @@ cd src/swarmDrone/Map-Merge-Tool/build/
 ```console
 ./DisplayImage figure/drone_a.pgm figure/drone_b.pgm result/urban_result.pgm
 ```
-### Copy drone1_map.yaml and rename it to urban_result.yaml, and leave it in catkin_ws/src/swarmDrone/swarm/maps
+#### Copy drone1_map.yaml and rename it to urban_result.yaml, and leave it in catkin_ws/src/swarm/maps
 
 #### Edit urban_result.yaml on line 1: 
 ```
 Before:                     After
 image: drone1_map.pgm       image: urban_result.pgm
 ```
-### Copy urban_result.pgm and insert it in catkin_ws/src/swarmDrone/swarm/maps
+#### Copy urban_result.pgm and insert it in catkin_ws/src/swarm/maps
+
+#### Lastly modify ~/catkin_ws/src/swarm/launch/drones.launch 
+
+```
+Line 53:    <arg name="map_file" default="$(find swarm)/maps/urban_small.yaml"/>
+
+Change 'urban_small.yaml' to 'urban_result.yaml'
+```
 
 ## Phase 2: Navigation 
 ### Steps to run 
