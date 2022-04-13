@@ -109,6 +109,14 @@ catkin_ws/
 ```
 <br>
 
+## Generate waypoints for phase 2:
+Generate the waypoints for each drone using the map created from above explore-lite.
+
+```console
+rosrun swarm Image_Tiler_Driver.py
+```
+
+
 # Steps to run the SwarmDrone Package:
 
 ## Phase 1: Autonomously Map the environment (SLAM):
