@@ -9,8 +9,6 @@ from sensor_msgs.msg import Image
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseActionGoal
 from actionlib_msgs.msg import GoalID
-import subprocess
-import signal
 from geometry_msgs.msg import PoseWithCovarianceStamped   
 import random 
 
@@ -20,11 +18,10 @@ lock_frames = threading.Lock()
 
 num_Drones = len(sys.argv) - 1
 drone_names = []
-frame_buffer = [None] * num_Drones
 if num_Drones >= 1:
+    frame_buffer = [None] * num_Drones
     for arg in sys.argv[1:]:
         drone_names.append(arg)
-        
 else:
     drone_names.append('drone1')
     frame_buffer = [None] * 1
@@ -61,29 +58,6 @@ leader_d4 = False
 
 firstTime = 0 
 
-rand_list = [-6, -5, -4 ,-3, -2, 2, 3, 4, 5, 6]
-
-buffer1 =random.choice(rand_list)
-
-rand_list.remove(buffer1)
-
-buffer2 = random.choice(rand_list)
-
-rand_list.remove(buffer2)
-
-buffer3 = random.choice(rand_list)
-
-rand_list.remove(buffer3)
-
-buffer4 = random.choice(rand_list)
-
-rand_list.remove(buffer4)
-
-# buffer1 = random.randint(2, 4)
-# buffer2 = random.randint(2, 4)
-# buffer3 = random.randint(-4, -2)
-# buffer4 = random.randint(-4, -2)
-
 def retrieve_positions(msg):
     global drone_x
     global drone_y
@@ -111,7 +85,382 @@ def retrieve_positions(msg):
     drone_orien_x = d_x
     drone_orien_y = d_y 
     drone_orien_z = d_z  
-    drone_orien_w = d_w 
+    drone_orien_w = d_w
+
+def stop_condition(drone_name):
+    global drone_x
+    global drone_y
+    global drone_z 
+    
+    global drone_orien_x 
+    global drone_orien_y
+    global drone_orien_z
+    global drone_orien_w
+    
+    global buffer1
+    global buffer2
+    global buffer3
+    global buffer4
+    
+    global drone_flag
+    
+    global leader_d1 
+    global leader_d2 
+    global leader_d3  
+    global leader_d4 
+    global firstTime  
+
+    # if(drone_flag == False):
+
+    if((drone_name == 'drone1' and firstTime == 0) or (leader_d1 == True)):
+        print('Drone 1 Spotted BB8!')
+        print('ld1', leader_d1)
+        firstTime = 1
+        leader_d1 = True
+
+        if(firstTime):
+            os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
+        # Set all 4 drones to cancel their goals: 
+        
+        # Drone 1 goal cancel
+        cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_1 = GoalID()
+        cancel_pub_1.publish(cancel_msg_1)
+
+        # Drone 2 goal cancel
+        cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_2 = GoalID()
+        cancel_pub_2.publish(cancel_msg_2)
+
+        # Drone 3 goal cancel
+        cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_3 = GoalID()
+        cancel_pub_3.publish(cancel_msg_3)
+
+        # Drone 4 goal cancel
+        cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_4 = GoalID()
+        cancel_pub_4.publish(cancel_msg_4)
+
+        # Make sure the other 3 drones goals are cancel 
+        client_1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
+        client_2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
+        client_3 = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
+        client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
+
+        # Cancel all 3 drones                    
+        client_1.cancel_goal()
+        client_2.cancel_goal()
+        client_3.cancel_goal()
+        client_4.cancel_goal()
+
+        # Receive drone 1 position
+        pose_sub_1 = rospy.Subscriber('/drone1/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+
+        # Get the action state for goals
+        d2_action = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
+        d3_action = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
+        d4_action = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
+
+        goal_2 = MoveBaseGoal()
+        goal_3 = MoveBaseGoal()
+        goal_4 = MoveBaseGoal()
+
+        goal_2.target_pose.header.frame_id = 'map' 
+        goal_2.target_pose.pose.position.x = drone_x + 2.0 
+        goal_2.target_pose.pose.position.y = drone_y  
+        goal_2.target_pose.pose.position.z = drone_z 
+        goal_2.target_pose.pose.orientation.x = drone_orien_x
+        goal_2.target_pose.pose.orientation.y = drone_orien_y
+        goal_2.target_pose.pose.orientation.z = drone_orien_z
+        goal_2.target_pose.pose.orientation.w = drone_orien_w
+
+        goal_3.target_pose.header.frame_id = 'map' 
+        goal_3.target_pose.pose.position.x = drone_x + 4.0 
+        goal_3.target_pose.pose.position.y = drone_y 
+        goal_3.target_pose.pose.position.z = drone_z 
+        goal_3.target_pose.pose.orientation.x = drone_orien_x
+        goal_3.target_pose.pose.orientation.y = drone_orien_y
+        goal_3.target_pose.pose.orientation.z = drone_orien_z 
+        goal_3.target_pose.pose.orientation.w = drone_orien_w + 180
+
+        goal_4.target_pose.header.frame_id = 'map' 
+        goal_4.target_pose.pose.position.x = drone_x + 6.0
+        goal_4.target_pose.pose.position.y = drone_y 
+        goal_4.target_pose.pose.position.z = drone_z 
+        goal_4.target_pose.pose.orientation.x = drone_orien_x
+        goal_4.target_pose.pose.orientation.y = drone_orien_y
+        goal_4.target_pose.pose.orientation.z = drone_orien_z 
+        goal_4.target_pose.pose.orientation.w = drone_orien_w + 180
+
+        d2_action.send_goal(goal_2) 
+        d3_action.send_goal(goal_3) 
+        d4_action.send_goal(goal_4) 
+        
+
+    elif((drone_name == 'drone2' and firstTime == 0) or (leader_d2 == True)):
+        print('Drone 2 Spotted BB8!')
+        print('ld2', leader_d2)
+
+        firstTime = 1
+        leader_d2 = True
+
+        if(firstTime):
+            os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
+
+        # Set all 4 drones to cancel their goals: 
+        
+        # Drone 1 goal cancel
+        cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_1 = GoalID()
+        cancel_pub_1.publish(cancel_msg_1)
+
+        # Drone 2 goal cancel
+        cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_2 = GoalID()
+        cancel_pub_2.publish(cancel_msg_2)
+
+        # Drone 3 goal cancel
+        cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_3 = GoalID()
+        cancel_pub_3.publish(cancel_msg_3)
+
+        # Drone 4 goal cancel
+        cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_4 = GoalID()
+        cancel_pub_4.publish(cancel_msg_4)
+
+        # Make sure the other 3 drones goals are cancel 
+        client_1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
+        client_2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
+        client_3 = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
+        client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
+
+        # Cancel all 3 drones                    
+        client_1.cancel_goal()
+        client_2.cancel_goal()
+        client_3.cancel_goal()
+        client_4.cancel_goal()
+
+        # Receive drone 2 position
+        pose_sub_2 = rospy.Subscriber('/drone2/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+
+        # Get the action state for goals
+        d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
+        d3_action = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
+        d4_action = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
+
+        goal_1 = MoveBaseGoal()
+        goal_3 = MoveBaseGoal()
+        goal_4 = MoveBaseGoal()
+
+        goal_1.target_pose.header.frame_id = 'map' 
+        goal_1.target_pose.pose.position.x = drone_x + 2.0
+        goal_1.target_pose.pose.position.y = drone_y 
+        goal_1.target_pose.pose.position.z = drone_z 
+        goal_1.target_pose.pose.orientation.x = drone_orien_x
+        goal_1.target_pose.pose.orientation.y = drone_orien_y
+        goal_1.target_pose.pose.orientation.z = drone_orien_z 
+        goal_1.target_pose.pose.orientation.w = drone_orien_w
+
+        goal_3.target_pose.header.frame_id = 'map' 
+        goal_3.target_pose.pose.position.x = drone_x + 4.0
+        goal_3.target_pose.pose.position.y = drone_y 
+        goal_3.target_pose.pose.position.z = drone_z 
+        goal_3.target_pose.pose.orientation.x = drone_orien_x
+        goal_3.target_pose.pose.orientation.y = drone_orien_y
+        goal_3.target_pose.pose.orientation.z = drone_orien_z 
+        goal_3.target_pose.pose.orientation.w = drone_orien_w + 180
+
+        goal_4.target_pose.header.frame_id = 'map' 
+        goal_4.target_pose.pose.position.x = drone_x + 6.0
+        goal_4.target_pose.pose.position.y = drone_y 
+        goal_4.target_pose.pose.position.z = drone_z 
+        goal_4.target_pose.pose.orientation.x = drone_orien_x
+        goal_4.target_pose.pose.orientation.y = drone_orien_y
+        goal_4.target_pose.pose.orientation.z = drone_orien_z 
+        goal_4.target_pose.pose.orientation.w = drone_orien_w + 180
+
+        d1_action.send_goal(goal_1) 
+        d3_action.send_goal(goal_3) 
+        d4_action.send_goal(goal_4) 
+    
+    
+    elif((drone_name == 'drone3' and firstTime == 0) or (leader_d3 == True)):
+        print('Drone 3 Spotted BB8!')
+        print('ld1', leader_d3)
+
+        firstTime = 1
+        leader_d3 = True
+        # Set all 4 drones to cancel their goals: 
+        
+        if(firstTime):
+            os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
+        
+        # Drone 1 goal cancel
+        cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_1 = GoalID()
+        cancel_pub_1.publish(cancel_msg_1)
+
+        # Drone 2 goal cancel
+        cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_2 = GoalID()
+        cancel_pub_2.publish(cancel_msg_2)
+
+        # Drone 3 goal cancel
+        cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_3 = GoalID()
+        cancel_pub_3.publish(cancel_msg_3)
+
+        # Drone 4 goal cancel
+        cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_4 = GoalID()
+        cancel_pub_4.publish(cancel_msg_4)
+
+        # Make sure the other 3 drones goals are cancel 
+        client_1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
+        client_2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
+        client_3 = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
+        client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
+
+        # Cancel all 3 drones                    
+        client_1.cancel_goal()
+        client_2.cancel_goal()
+        client_3.cancel_goal()
+        client_4.cancel_goal()
+
+        # Receive drone 3 position
+        pose_sub_3 = rospy.Subscriber('/drone3/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+
+        # Get the action state for goals
+        d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
+        d2_action = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
+        d4_action = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
+
+        goal_1 = MoveBaseGoal()
+        goal_2 = MoveBaseGoal()
+        goal_4 = MoveBaseGoal()
+        
+            # goal header set to map 
+        goal_1.target_pose.header.frame_id = 'map'
+        goal_1.target_pose.pose.position.x = drone_x + 2.0
+        goal_1.target_pose.pose.position.y = drone_y 
+        goal_1.target_pose.pose.position.z = drone_z 
+        goal_1.target_pose.pose.orientation.x = drone_orien_x
+        goal_1.target_pose.pose.orientation.y = drone_orien_y
+        goal_1.target_pose.pose.orientation.z = drone_orien_z 
+        goal_1.target_pose.pose.orientation.w = drone_orien_w
+
+        goal_2.target_pose.header.frame_id = 'map' 
+        goal_2.target_pose.pose.position.x = drone_x + 4.0
+        goal_2.target_pose.pose.position.y = drone_y 
+        goal_2.target_pose.pose.position.z = drone_z 
+        goal_2.target_pose.pose.orientation.x = drone_orien_x
+        goal_2.target_pose.pose.orientation.y = drone_orien_y
+        goal_2.target_pose.pose.orientation.z = drone_orien_z 
+        goal_2.target_pose.pose.orientation.w = drone_orien_w + 180
+
+        goal_4.target_pose.header.frame_id = 'map' 
+        goal_4.target_pose.pose.position.x = drone_x + 6.0
+        goal_4.target_pose.pose.position.y = drone_y 
+        goal_4.target_pose.pose.position.z = drone_z 
+        goal_4.target_pose.pose.orientation.x = drone_orien_x
+        goal_4.target_pose.pose.orientation.y = drone_orien_y
+        goal_4.target_pose.pose.orientation.z = drone_orien_z
+        goal_4.target_pose.pose.orientation.w = drone_orien_w + 180
+
+        d1_action.send_goal(goal_1) 
+        d2_action.send_goal(goal_2) 
+        d4_action.send_goal(goal_4) 
+        
+
+    elif((drone_name == 'drone4' and firstTime == 0) or (leader_d4 == True)):
+        print('Drone 4 Spooted BB8!')
+        print('ld4', leader_d4)
+
+        if(firstTime):
+            os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
+
+        # Flag for true                  
+        firstTime = 1
+        leader_d4 = True
+
+        # Set all 4 drones to cancel their goals: 
+        
+        # Drone 1 goal cancel
+        cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_1 = GoalID()
+        cancel_pub_1.publish(cancel_msg_1)
+
+        # Drone 2 goal cancel
+        cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_2 = GoalID()
+        cancel_pub_2.publish(cancel_msg_2)
+
+        # Drone 3 goal cancel
+        cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_3 = GoalID()
+        cancel_pub_3.publish(cancel_msg_3)
+
+        # Drone 4 goal cancel
+        cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
+        cancel_msg_4 = GoalID()
+        cancel_pub_4.publish(cancel_msg_4)
+
+        # Make sure the other 3 drones goals are cancel 
+        client_1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
+        client_2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
+        client_3 = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
+        client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
+
+        # Cancel all 3 drones                    
+        client_1.cancel_goal()
+        client_2.cancel_goal()
+        client_3.cancel_goal()
+        client_4.cancel_goal()
+
+        # Receive drone 3 position
+        pose_sub_4 = rospy.Subscriber('/drone4/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+
+        # Get the action state for goals
+        d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
+        d2_action = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
+        d3_action = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
+
+        goal_1 = MoveBaseGoal()
+        goal_2 = MoveBaseGoal()
+        goal_3 = MoveBaseGoal()
+        
+        goal_1.target_pose.header.frame_id = 'map' 
+        goal_1.target_pose.pose.position.x = drone_x + 2.0
+        goal_1.target_pose.pose.position.y = drone_y 
+        goal_1.target_pose.pose.position.z = drone_z 
+        goal_1.target_pose.pose.orientation.x = drone_orien_x
+        goal_1.target_pose.pose.orientation.y = drone_orien_y
+        goal_1.target_pose.pose.orientation.z = drone_orien_z 
+        goal_1.target_pose.pose.orientation.w = drone_orien_w
+
+        goal_2.target_pose.header.frame_id = 'map' 
+        goal_2.target_pose.pose.position.x = drone_x + 4.0
+        goal_2.target_pose.pose.position.y = drone_y 
+        goal_2.target_pose.pose.position.z = drone_z 
+        goal_2.target_pose.pose.orientation.x = drone_orien_x
+        goal_2.target_pose.pose.orientation.y = drone_orien_y
+        goal_2.target_pose.pose.orientation.z = drone_orien_z 
+        goal_2.target_pose.pose.orientation.w = drone_orien_w + 180
+
+        goal_3.target_pose.header.frame_id = 'map' 
+        goal_3.target_pose.pose.position.x = drone_x + 6.0
+        goal_3.target_pose.pose.position.y = drone_y 
+        goal_3.target_pose.pose.position.z = drone_z 
+        goal_3.target_pose.pose.orientation.x = drone_orien_x
+        goal_3.target_pose.pose.orientation.y = drone_orien_y
+        goal_3.target_pose.pose.orientation.z = drone_orien_z 
+        goal_3.target_pose.pose.orientation.w = drone_orien_w + 180
+
+        d1_action.send_goal(goal_1) 
+        d2_action.send_goal(goal_2) 
+        d3_action.send_goal(goal_3)
 
 def inference(frame, model):
     #   Example Output Dataframe
@@ -133,10 +482,9 @@ def inference(frame, model):
     labels = np_results[:, -1:]
     return cords, labels
 
-def plot_boxes(results, frame, drone_name):
-    
+def plot_boxes(results, frame):
     cords, labels = results
-    # x_shape, y_shape = frame.shape[1], frame.shape[0]
+
     for i, label in enumerate(labels):
         row = cords[i]
 
@@ -170,406 +518,33 @@ def plot_boxes(results, frame, drone_name):
                     (x1, y1-2), \
                     label_font, label_scale, bgr, label_thickness)
 
-        if row[4] > 0.96:
-            
-            global drone_x
-            global drone_y
-            global drone_z 
-            
-            global drone_orien_x 
-            global drone_orien_y
-            global drone_orien_z
-            global drone_orien_w
-            
-            global buffer1
-            global buffer2
-            global buffer3
-            global buffer4
-            
-            global drone_flag
-            
-            global leader_d1 
-            global leader_d2 
-            global leader_d3  
-            global leader_d4 
-            global firstTime  
-
-           # if(drone_flag == False):
-
-            if((drone_name == 'drone1' and firstTime == 0) or (leader_d1 == True)):
-                print('Drone 1 Spotted BB8!')
-                print('ld1', leader_d1)
-                firstTime = 1
-                leader_d1 = True
-
-                if(firstTime):
-                    os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
-                # Set all 4 drones to cancel their goals: 
-                
-                # Drone 1 goal cancel
-                cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_1 = GoalID()
-                cancel_pub_1.publish(cancel_msg_1)
-
-                # Drone 2 goal cancel
-                cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_2 = GoalID()
-                cancel_pub_2.publish(cancel_msg_2)
-
-                # Drone 3 goal cancel
-                cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_3 = GoalID()
-                cancel_pub_3.publish(cancel_msg_3)
-
-                # Drone 4 goal cancel
-                cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_4 = GoalID()
-                cancel_pub_4.publish(cancel_msg_4)
-        
-                # Make sure the other 3 drones goals are cancel 
-                # client_1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
-                client_2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
-                client_3 = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
-                client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
-
-                # Cancel all 3 drones                    
-                client_1.cancel_goal()
-                client_2.cancel_goal()
-                client_3.cancel_goal()
-                client_4.cancel_goal()
-
-                # Receive drone 1 position
-                pose_sub_1 = rospy.Subscriber('/drone1/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
-
-                # Get the action state for goals
-                d2_action = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
-                d3_action = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
-                d4_action = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
-
-                goal_2 = MoveBaseGoal()
-                goal_3 = MoveBaseGoal()
-                goal_4 = MoveBaseGoal()
-
-                goal_2.target_pose.header.frame_id = 'map' 
-                goal_2.target_pose.pose.position.x = drone_x +  buffer1
-                goal_2.target_pose.pose.position.y = drone_y + buffer2
-                goal_2.target_pose.pose.position.z = drone_z 
-                goal_2.target_pose.pose.orientation.x = drone_orien_x
-                goal_2.target_pose.pose.orientation.y = drone_orien_y
-                goal_2.target_pose.pose.orientation.z = drone_orien_z
-                goal_2.target_pose.pose.orientation.w = drone_orien_w
-
-                goal_3.target_pose.header.frame_id = 'map' 
-                goal_3.target_pose.pose.position.x = drone_x + buffer2
-                goal_3.target_pose.pose.position.y = drone_y + buffer3
-                goal_3.target_pose.pose.position.z = drone_z 
-                goal_3.target_pose.pose.orientation.x = drone_orien_x
-                goal_3.target_pose.pose.orientation.y = drone_orien_y
-                goal_3.target_pose.pose.orientation.z = drone_orien_z 
-                goal_3.target_pose.pose.orientation.w = drone_orien_w
-
-                goal_4.target_pose.header.frame_id = 'map' 
-                goal_4.target_pose.pose.position.x = drone_x + buffer3
-                goal_4.target_pose.pose.position.y = drone_y + buffer4
-                goal_4.target_pose.pose.position.z = drone_z 
-                goal_4.target_pose.pose.orientation.x = drone_orien_x
-                goal_4.target_pose.pose.orientation.y = drone_orien_y
-                goal_4.target_pose.pose.orientation.z = drone_orien_z 
-                goal_4.target_pose.pose.orientation.w = drone_orien_w
-
-                d2_action.send_goal(goal_2) 
-                d3_action.send_goal(goal_3) 
-                d4_action.send_goal(goal_4) 
-                
-
-            elif((drone_name == 'drone2' and firstTime == 0) or (leader_d2 == True)):
-                print('Drone 2 Spotted BB8!')
-                print('ld2', leader_d2)
-
-                firstTime = 1
-                leader_d2 = True
-
-                if(firstTime):
-                    os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
-
-                # Set all 4 drones to cancel their goals: 
-                
-                # Drone 1 goal cancel
-                cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_1 = GoalID()
-                cancel_pub_1.publish(cancel_msg_1)
-
-                # Drone 2 goal cancel
-                cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_2 = GoalID()
-                cancel_pub_2.publish(cancel_msg_2)
-
-                # Drone 3 goal cancel
-                cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_3 = GoalID()
-                cancel_pub_3.publish(cancel_msg_3)
-
-                # Drone 4 goal cancel
-                cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_4 = GoalID()
-                cancel_pub_4.publish(cancel_msg_4)
-        
-                # Make sure the other 3 drones goals are cancel 
-                client_1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
-                client_2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
-                client_3 = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
-                client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
-
-                # Cancel all 3 drones                    
-                client_1.cancel_goal()
-                client_2.cancel_goal()
-                client_3.cancel_goal()
-                client_4.cancel_goal()
-
-                # Receive drone 2 position
-                pose_sub_2 = rospy.Subscriber('/drone2/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
-
-                # Get the action state for goals
-                d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
-                d3_action = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
-                d4_action = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
-
-                goal_1 = MoveBaseGoal()
-                goal_3 = MoveBaseGoal()
-                goal_4 = MoveBaseGoal()
-
-                goal_1.target_pose.header.frame_id = 'map' 
-                goal_1.target_pose.pose.position.x = drone_x + buffer1
-                goal_1.target_pose.pose.position.y = drone_y + buffer4
-                goal_1.target_pose.pose.position.z = drone_z 
-                goal_1.target_pose.pose.orientation.x = drone_orien_x
-                goal_1.target_pose.pose.orientation.y = drone_orien_y
-                goal_1.target_pose.pose.orientation.z = drone_orien_z 
-                goal_1.target_pose.pose.orientation.w = drone_orien_w
-
-                goal_3.target_pose.header.frame_id = 'map' 
-                goal_3.target_pose.pose.position.x = drone_x + buffer2
-                goal_3.target_pose.pose.position.y = drone_y + buffer3
-                goal_3.target_pose.pose.position.z = drone_z 
-                goal_3.target_pose.pose.orientation.x = drone_orien_x
-                goal_3.target_pose.pose.orientation.y = drone_orien_y
-                goal_3.target_pose.pose.orientation.z = drone_orien_z 
-                goal_3.target_pose.pose.orientation.w = drone_orien_w
-
-                goal_4.target_pose.header.frame_id = 'map' 
-                goal_4.target_pose.pose.position.x = drone_x + buffer4
-                goal_4.target_pose.pose.position.y = drone_y + buffer1
-                goal_4.target_pose.pose.position.z = drone_z 
-                goal_4.target_pose.pose.orientation.x = drone_orien_x
-                goal_4.target_pose.pose.orientation.y = drone_orien_y
-                goal_4.target_pose.pose.orientation.z = drone_orien_z 
-                goal_4.target_pose.pose.orientation.w = drone_orien_w
-
-                d1_action.send_goal(goal_1) 
-                d3_action.send_goal(goal_3) 
-                d4_action.send_goal(goal_4) 
-            
-            
-            elif((drone_name == 'drone3' and firstTime == 0) or (leader_d3 == True)):
-                print('Drone 3 Spotted BB8!')
-                print('ld1', leader_d3)
-
-                firstTime = 1
-                leader_d3 = True
-                # Set all 4 drones to cancel their goals: 
-                
-                if(firstTime):
-                    os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
-                
-                # Drone 1 goal cancel
-                cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_1 = GoalID()
-                cancel_pub_1.publish(cancel_msg_1)
-
-                # Drone 2 goal cancel
-                cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_2 = GoalID()
-                cancel_pub_2.publish(cancel_msg_2)
-
-                # Drone 3 goal cancel
-                cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_3 = GoalID()
-                cancel_pub_3.publish(cancel_msg_3)
-
-                # Drone 4 goal cancel
-                cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_4 = GoalID()
-                cancel_pub_4.publish(cancel_msg_4)
-        
-                # Make sure the other 3 drones goals are cancel 
-                client_1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
-                client_2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
-                client_3 = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
-                client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
-
-                # Cancel all 3 drones                    
-                client_1.cancel_goal()
-                client_2.cancel_goal()
-                client_3.cancel_goal()
-                client_4.cancel_goal()
-
-                # Receive drone 3 position
-                pose_sub_3 = rospy.Subscriber('/drone3/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
-
-                # Get the action state for goals
-                d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
-                d2_action = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
-                d4_action = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
-
-                goal_1 = MoveBaseGoal()
-                goal_2 = MoveBaseGoal()
-                goal_4 = MoveBaseGoal()
-
-                goal_1.target_pose.header.frame_id = 'map' 
-                goal_1.target_pose.pose.position.x = drone_x + buffer1
-                goal_1.target_pose.pose.position.y = drone_y + buffer2
-                goal_1.target_pose.pose.position.z = drone_z 
-                goal_1.target_pose.pose.orientation.x = drone_orien_x
-                goal_1.target_pose.pose.orientation.y = drone_orien_y
-                goal_1.target_pose.pose.orientation.z = drone_orien_z 
-                goal_1.target_pose.pose.orientation.w = drone_orien_w
-
-                goal_2.target_pose.header.frame_id = 'map' 
-                goal_2.target_pose.pose.position.x = drone_x + buffer3
-                goal_2.target_pose.pose.position.y = drone_y + buffer2
-                goal_2.target_pose.pose.position.z = drone_z 
-                goal_2.target_pose.pose.orientation.x = drone_orien_x
-                goal_2.target_pose.pose.orientation.y = drone_orien_y
-                goal_2.target_pose.pose.orientation.z = drone_orien_z 
-                goal_2.target_pose.pose.orientation.w = drone_orien_w
-
-                goal_4.target_pose.header.frame_id = 'map' 
-                goal_4.target_pose.pose.position.x = drone_x + buffer4
-                goal_4.target_pose.pose.position.y = drone_y + buffer1
-                goal_4.target_pose.pose.position.z = drone_z 
-                goal_4.target_pose.pose.orientation.x = drone_orien_x
-                goal_4.target_pose.pose.orientation.y = drone_orien_y
-                goal_4.target_pose.pose.orientation.z = drone_orien_z
-                goal_4.target_pose.pose.orientation.w = drone_orien_w
-
-                d1_action.send_goal(goal_1) 
-                d2_action.send_goal(goal_2) 
-                d4_action.send_goal(goal_4) 
-                
-
-            elif((drone_name == 'drone4' and firstTime == 0) or (leader_d4 == True)):
-                print('Drone 4 Spooted BB8!')
-                print('ld4', leader_d4)
-
-                if(firstTime):
-                    os.system('rosnode kill /drone1_client_py /drone2_client_py /drone3_client_py /drone4_client_py')
-
-                # Flag for true                  
-                firstTime = 1
-                leader_d4 = True
-
-                # Set all 4 drones to cancel their goals: 
-                
-                # Drone 1 goal cancel
-                cancel_pub_1 = rospy.Publisher("/drone1/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_1 = GoalID()
-                cancel_pub_1.publish(cancel_msg_1)
-
-                # Drone 2 goal cancel
-                cancel_pub_2 = rospy.Publisher("/drone2/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_2 = GoalID()
-                cancel_pub_2.publish(cancel_msg_2)
-
-                # Drone 3 goal cancel
-                cancel_pub_3 = rospy.Publisher("/drone3/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_3 = GoalID()
-                cancel_pub_3.publish(cancel_msg_3)
-
-                # Drone 4 goal cancel
-                cancel_pub_4 = rospy.Publisher("/drone4/move_base/cancel", GoalID, queue_size=1)
-                cancel_msg_4 = GoalID()
-                cancel_pub_4.publish(cancel_msg_4)
-        
-                # Make sure the other 3 drones goals are cancel 
-                client_1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
-                client_2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
-                client_3 = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
-                client_4 = actionlib.SimpleActionClient('/drone4/move_base', MoveBaseAction)
-
-                # Cancel all 3 drones                    
-                client_1.cancel_goal()
-                client_2.cancel_goal()
-                client_3.cancel_goal()
-                client_4.cancel_goal()
-
-                # Receive drone 3 position
-                pose_sub_4 = rospy.Subscriber('/drone4/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
-
-                # Get the action state for goals
-                d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
-                d2_action = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
-                d3_action = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
-
-                goal_1 = MoveBaseGoal()
-                goal_2 = MoveBaseGoal()
-                goal_3 = MoveBaseGoal()
-                
-                goal_1.target_pose.header.frame_id = 'map' 
-                goal_1.target_pose.pose.position.x = drone_x + buffer2
-                goal_1.target_pose.pose.position.y = drone_y + buffer1
-                goal_1.target_pose.pose.position.z = drone_z 
-                goal_1.target_pose.pose.orientation.x = drone_orien_x
-                goal_1.target_pose.pose.orientation.y = drone_orien_y
-                goal_1.target_pose.pose.orientation.z = drone_orien_z 
-                goal_1.target_pose.pose.orientation.w = drone_orien_w
-
-                goal_2.target_pose.header.frame_id = 'map' 
-                goal_2.target_pose.pose.position.x = drone_x + buffer4
-                goal_2.target_pose.pose.position.y = drone_y + buffer2
-                goal_2.target_pose.pose.position.z = drone_z 
-                goal_2.target_pose.pose.orientation.x = drone_orien_x
-                goal_2.target_pose.pose.orientation.y = drone_orien_y
-                goal_2.target_pose.pose.orientation.z = drone_orien_z 
-                goal_2.target_pose.pose.orientation.w = drone_orien_w
-
-                goal_3.target_pose.header.frame_id = 'map' 
-                goal_3.target_pose.pose.position.x = drone_x + buffer3
-                goal_3.target_pose.pose.position.y = drone_y + buffer2
-                goal_3.target_pose.pose.position.z = drone_z 
-                goal_3.target_pose.pose.orientation.x = drone_orien_x
-                goal_3.target_pose.pose.orientation.y = drone_orien_y
-                goal_3.target_pose.pose.orientation.z = drone_orien_z 
-                goal_3.target_pose.pose.orientation.w = drone_orien_w
-
-                d1_action.send_goal(goal_1) 
-                d2_action.send_goal(goal_2) 
-                d3_action.send_goal(goal_3) 
-
     return frame
 
 
 def callback(msg, args):
     i = args[0] # msg - image args = drone count
-    topic = args[1]
-
-    drone_name = topic.replace("/front_cam/camera/image", "")
+    drone_name = args[1]     # current drone
 
     br = cv_bridge.CvBridge()
     current_frame = br.imgmsg_to_cv2(msg, desired_encoding="bgr8")
     # convert bgr -> rgb for image detector to process
     frame = cv2.cvtColor(current_frame, cv2.COLOR_BGR2RGB)
 
-    # if lock_yolo.acquire() == False: return
     results = inference(frame, model)
-    # lock_yolo.release()
-
     # print(results)
-    frame = plot_boxes(results, frame, drone_name)
+    frame = plot_boxes(results, frame)
 
     # convert back rgb -> to brg for cv2 to display
     lock_frames.acquire()
     frame_buffer[i] = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     lock_frames.release()
+
+    cords, labels = results
+    for i, label in enumerate(labels):
+        row = cords[i]
+        if row[4] > 0.96:
+            stop_condition(drone_name)
+
 
 
 def thread_imshow():
@@ -593,7 +568,7 @@ def receive_message():
     for i, drone_name in enumerate(drone_names):
     # for drone_name in drone_names:
         topic = f'{drone_name}/front_cam/camera/image'
-        rospy.Subscriber(topic, Image, callback, (i, topic))
+        rospy.Subscriber(topic, Image, callback, (i, drone_name))
 
 
     t = threading.Thread(target=thread_imshow)
