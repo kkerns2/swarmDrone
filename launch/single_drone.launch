@@ -6,6 +6,7 @@
 	<arg name="y" default="0.0"/>
 	<arg name="z" default="0.0"/> 
 	<arg name="slam"/>
+	<arg name="height"/>
 
 	
 	<!-- true true false true -->
@@ -32,7 +33,7 @@
 	 <!-- Start rviz visualization with preset config -->
  	 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find swarm)/rviz/$(arg drone_name)_slam.rviz"/>
  	 
- 	 <include file="$(find swarm)/launch/SLAM.launch">
+ 	 <include file="$(find swarm)/launch/slam/SLAM.launch">
 	    <arg name="tf_prefix" value="$(arg drone_name)"/>
 	</include>
 	
@@ -54,16 +55,15 @@
    	    <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/> 
    		<arg name="world_frame" default="world"/> 
 	</include>
-	
-	<!-- Start rviz visualization with preset config 
- 	 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find swarm)/rviz/$(arg drone_name)_nav.rviz"/> -->
-  </group>
+	  </group>
+
 	  <!-- Takeoff for simulated quadrotor uav -->
-  	<include file = "/home/mcp/catkin_ws/src/hector_quadrotor_noetic/takeoff_land/launch/takeoff_land.launch">
+  	<include file = "$(find takeoff_land)/launch/takeoff_land.launch">
    		<arg name="tf_prefix" value="$(arg drone_name)"/>
-   	</include>
+		<arg name="height" value="$(arg height)"/>
+   	</include>  
+ 
 
 	
    
 </launch>
-
