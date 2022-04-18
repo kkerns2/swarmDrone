@@ -4,8 +4,8 @@ local_costmap:
    update_frequency: 5.0
    publish_frequency: 5.0
    rolling_window: true
-   width: 4.0
-   height: 4.0
+   width: 10.0
+   height: 10.0
    plugins:
    
     - {name: static_layer,            type: "costmap_2d::StaticLayer"}

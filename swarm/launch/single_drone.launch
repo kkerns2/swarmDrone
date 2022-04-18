@@ -6,6 +6,7 @@
 	<arg name="y" default="0.0"/>
 	<arg name="z" default="0.0"/> 
 	<arg name="slam"/>
+	<arg name="height"/>
 
 	
 	<!-- true true false true -->
@@ -21,7 +22,7 @@
   	    <arg name="tf_prefix" value="$(arg drone_name)"/>
     	<arg name="x" default="$(arg x)"/>
 	    <arg name="y" default="$(arg y)"/>
-	    <arg name="z" default="$(arg z)"/> 
+	    <!-- <arg name="z" default="$(arg z)"/>  -->
 	    <arg name="use_ground_truth_for_tf" value="$(arg use_ground_truth_for_tf)"/>
 	    <arg name="use_ground_truth_for_control" value="$(arg use_ground_truth_for_control)"/>
 	    <arg name="use_pose_estimation" value="$(arg use_pose_estimation)"/>
@@ -47,7 +48,7 @@
   	    <arg name="tf_prefix" value="$(arg drone_name)"/>
     	<arg name="x" default="$(arg x)"/>
 	    <arg name="y" default="$(arg y)"/>
-	    <arg name="z" default="$(arg z)"/> 
+	    <!-- <arg name="z" default="$(arg z)"/>  -->
 	    <arg name="use_ground_truth_for_tf" value="$(arg use_ground_truth_for_tf)"/>
 	    <arg name="use_ground_truth_for_control" value="$(arg use_ground_truth_for_control)"/>
 	    <arg name="use_pose_estimation" value="$(arg use_pose_estimation)"/>
@@ -59,10 +60,10 @@
 	  <!-- Takeoff for simulated quadrotor uav -->
   	<include file = "$(find takeoff_land)/launch/takeoff_land.launch">
    		<arg name="tf_prefix" value="$(arg drone_name)"/>
+		<arg name="height" value="$(arg height)"/>
    	</include>  
  
 
 	
    
 </launch>
-
