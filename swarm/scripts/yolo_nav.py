@@ -226,7 +226,7 @@ def stop_condition(drone_name, cords):
         goal_4 = MoveBaseGoal()
 
         goal_2.target_pose.header.frame_id = 'map' 
-        goal_2.target_pose.pose.position.x = drone_x + 2.0 
+        goal_2.target_pose.pose.position.x = drone_x  
         goal_2.target_pose.pose.position.y = drone_y  
         goal_2.target_pose.pose.position.z = drone_z 
         goal_2.target_pose.pose.orientation.x = drone_orien_x
@@ -235,7 +235,7 @@ def stop_condition(drone_name, cords):
         goal_2.target_pose.pose.orientation.w = drone_orien_w
 
         goal_3.target_pose.header.frame_id = 'map' 
-        goal_3.target_pose.pose.position.x = drone_x + 4.0 
+        goal_3.target_pose.pose.position.x = drone_x  
         goal_3.target_pose.pose.position.y = drone_y 
         goal_3.target_pose.pose.position.z = drone_z 
         goal_3.target_pose.pose.orientation.x = drone_orien_x
@@ -244,7 +244,7 @@ def stop_condition(drone_name, cords):
         goal_3.target_pose.pose.orientation.w = drone_orien_w + 180
 
         goal_4.target_pose.header.frame_id = 'map' 
-        goal_4.target_pose.pose.position.x = drone_x + 6.0
+        goal_4.target_pose.pose.position.x = drone_x 
         goal_4.target_pose.pose.position.y = drone_y 
         goal_4.target_pose.pose.position.z = drone_z 
         goal_4.target_pose.pose.orientation.x = drone_orien_x
@@ -347,7 +347,7 @@ def stop_condition(drone_name, cords):
         goal_4 = MoveBaseGoal()
 
         goal_1.target_pose.header.frame_id = 'map' 
-        goal_1.target_pose.pose.position.x = drone_x + 2.0
+        goal_1.target_pose.pose.position.x = drone_x 
         goal_1.target_pose.pose.position.y = drone_y 
         goal_1.target_pose.pose.position.z = drone_z 
         goal_1.target_pose.pose.orientation.x = drone_orien_x
@@ -356,7 +356,7 @@ def stop_condition(drone_name, cords):
         goal_1.target_pose.pose.orientation.w = drone_orien_w
 
         goal_3.target_pose.header.frame_id = 'map' 
-        goal_3.target_pose.pose.position.x = drone_x + 4.0
+        goal_3.target_pose.pose.position.x = drone_x 
         goal_3.target_pose.pose.position.y = drone_y 
         goal_3.target_pose.pose.position.z = drone_z 
         goal_3.target_pose.pose.orientation.x = drone_orien_x
@@ -365,7 +365,7 @@ def stop_condition(drone_name, cords):
         goal_3.target_pose.pose.orientation.w = drone_orien_w + 180
 
         goal_4.target_pose.header.frame_id = 'map' 
-        goal_4.target_pose.pose.position.x = drone_x + 6.0
+        goal_4.target_pose.pose.position.x = drone_x 
         goal_4.target_pose.pose.position.y = drone_y 
         goal_4.target_pose.pose.position.z = drone_z 
         goal_4.target_pose.pose.orientation.x = drone_orien_x
@@ -600,7 +600,7 @@ def stop_condition(drone_name, cords):
         goal_3 = MoveBaseGoal()
         
         goal_1.target_pose.header.frame_id = 'map' 
-        goal_1.target_pose.pose.position.x = drone_x + 2.0
+        goal_1.target_pose.pose.position.x = drone_x 
         goal_1.target_pose.pose.position.y = drone_y 
         goal_1.target_pose.pose.position.z = drone_z 
         goal_1.target_pose.pose.orientation.x = drone_orien_x
@@ -609,7 +609,7 @@ def stop_condition(drone_name, cords):
         goal_1.target_pose.pose.orientation.w = drone_orien_w
 
         goal_2.target_pose.header.frame_id = 'map' 
-        goal_2.target_pose.pose.position.x = drone_x + 4.0
+        goal_2.target_pose.pose.position.x = drone_x 
         goal_2.target_pose.pose.position.y = drone_y 
         goal_2.target_pose.pose.position.z = drone_z 
         goal_2.target_pose.pose.orientation.x = drone_orien_x
@@ -618,7 +618,7 @@ def stop_condition(drone_name, cords):
         goal_2.target_pose.pose.orientation.w = drone_orien_w + 180
 
         goal_3.target_pose.header.frame_id = 'map' 
-        goal_3.target_pose.pose.position.x = drone_x + 6.0
+        goal_3.target_pose.pose.position.x = drone_x 
         goal_3.target_pose.pose.position.y = drone_y 
         goal_3.target_pose.pose.position.z = drone_z 
         goal_3.target_pose.pose.orientation.x = drone_orien_x
