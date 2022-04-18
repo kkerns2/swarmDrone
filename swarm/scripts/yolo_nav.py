@@ -4,13 +4,15 @@ import os
 import rospy
 import sys
 import torch
+import math 
 import threading
 from sensor_msgs.msg import Image
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseActionGoal
 from actionlib_msgs.msg import GoalID
-from geometry_msgs.msg import PoseWithCovarianceStamped   
-import random 
+from geometry_msgs.msg import PoseWithCovarianceStamped, Twist   
+from nav_msgs.msg import Odometry
+from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
 lock_yolo = threading.Lock()
 lock_frames = threading.Lock()
@@ -44,6 +46,8 @@ drone_x = 0
 drone_y = 0
 drone_z = 0
 
+kP = 0.5 
+
 drone_orien_x = 0
 drone_orien_y = 0
 drone_orien_z = 0
@@ -55,6 +59,8 @@ leader_d1 = False
 leader_d2 = False
 leader_d3 = False 
 leader_d4 = False
+
+mid = False
 
 firstTime = 0 
 
@@ -68,7 +74,6 @@ def retrieve_positions(msg):
     global drone_orien_z 
     global drone_orien_w
 
-     
     x = msg.pose.pose.position.x
     y = msg.pose.pose.position.y
     z = msg.pose.pose.position.z
@@ -77,7 +82,7 @@ def retrieve_positions(msg):
     d_y = msg.pose.pose.orientation.y
     d_z = msg.pose.pose.orientation.z
     d_w = msg.pose.pose.orientation.w
-    
+
     drone_x = x 
     drone_y = y
     drone_z = z 
@@ -87,7 +92,29 @@ def retrieve_positions(msg):
     drone_orien_z = d_z  
     drone_orien_w = d_w
 
-def stop_condition(drone_name):
+def getD1Height(msg):
+    x = msg.pose.pose.position.x
+    y = msg.pose.pose.position.y
+    z = msg.pose.pose.position.z
+    print("getD1Height: ", x, y, z)
+
+def getD2Height(msg):
+    x = msg.pose.pose.position.x
+    y = msg.pose.pose.position.y
+    z = msg.pose.pose.position.z
+    print("getD2Height: ", x, y, z)
+
+def getD4Height(msg):
+    x = msg.pose.pose.position.x
+    y = msg.pose.pose.position.y
+    z = msg.pose.pose.position.z
+    print("getD4Height: ", x, y, z)
+   
+
+def calculate_midpoint(x1, x2):
+    return (x1 + x2) / 2
+
+def stop_condition(drone_name, cords):
     global drone_x
     global drone_y
     global drone_z 
@@ -110,7 +137,7 @@ def stop_condition(drone_name):
     global leader_d4 
     global firstTime  
 
-    # if(drone_flag == False):
+    global mid 
 
     if((drone_name == 'drone1' and firstTime == 0) or (leader_d1 == True)):
         print('Drone 1 Spotted BB8!')
@@ -156,7 +183,39 @@ def stop_condition(drone_name):
 
         # Receive drone 1 position
         pose_sub_1 = rospy.Subscriber('/drone1/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+        velocity_publisher = rospy.Publisher('/drone1/cmd_vel', Twist, queue_size=1)
 
+        vel_msg = Twist()
+
+        x1 = cords[0]
+        x2 = cords[2]
+
+        midpoint = calculate_midpoint(x1, x2)
+        
+        vel_msg.linear.x=0
+        vel_msg.linear.y=0
+        vel_msg.linear.z=0
+        vel_msg.angular.x = 0
+        vel_msg.angular.y = 0
+        
+        speed = 5
+        
+        angular_speed = speed*2*math.pi/360
+        
+        if(mid != True):
+            if(midpoint > 500):
+                print('rotate right', midpoint)
+                vel_msg.angular.z = -abs(angular_speed)
+                velocity_publisher.publish(vel_msg)
+            elif(midpoint < 260):
+                print('rotate left', midpoint)
+                vel_msg.angular.z = abs(angular_speed)
+                velocity_publisher.publish(vel_msg)
+            else:
+                print('stop rotating', midpoint)
+                vel_msg.angular.z = 0
+                mid = True 
+                velocity_publisher.publish(vel_msg)
         # Get the action state for goals
         d2_action = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
         d3_action = actionlib.SimpleActionClient('/drone3/move_base', MoveBaseAction)
@@ -243,7 +302,40 @@ def stop_condition(drone_name):
         client_4.cancel_goal()
 
         # Receive drone 2 position
-        pose_sub_2 = rospy.Subscriber('/drone2/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+        rospy.Subscriber('/drone2/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+        velocity_publisher = rospy.Publisher('/drone2/cmd_vel', Twist, queue_size=1)
+
+        vel_msg = Twist()
+
+        x1 = cords[0]
+        x2 = cords[2]
+
+        midpoint = calculate_midpoint(x1, x2)
+        
+        vel_msg.linear.x=0
+        vel_msg.linear.y=0
+        vel_msg.linear.z=0
+        vel_msg.angular.x = 0
+        vel_msg.angular.y = 0
+        
+        speed = 5
+        
+        angular_speed = speed*2*math.pi/360
+        
+        if(mid != True):
+            if(midpoint > 500):
+                print('rotate right', midpoint)
+                vel_msg.angular.z = -abs(angular_speed)
+                velocity_publisher.publish(vel_msg)
+            elif(midpoint < 260):
+                print('rotate left', midpoint)
+                vel_msg.angular.z = abs(angular_speed)
+                velocity_publisher.publish(vel_msg)
+            else:
+                print('stop rotating', midpoint)
+                vel_msg.angular.z = 0
+                mid = True 
+                velocity_publisher.publish(vel_msg)
 
         # Get the action state for goals
         d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
@@ -330,7 +422,40 @@ def stop_condition(drone_name):
         client_4.cancel_goal()
 
         # Receive drone 3 position
-        pose_sub_3 = rospy.Subscriber('/drone3/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+        rospy.Subscriber('/drone3/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+        velocity_publisher = rospy.Publisher('/drone3/cmd_vel', Twist, queue_size=1)
+
+        vel_msg = Twist()
+
+        x1 = cords[0]
+        x2 = cords[2]
+
+        midpoint = calculate_midpoint(x1, x2)
+        
+        vel_msg.linear.x=0
+        vel_msg.linear.y=0
+        vel_msg.linear.z=0
+        vel_msg.angular.x = 0
+        vel_msg.angular.y = 0
+        
+        speed = 5
+        
+        angular_speed = speed*2*math.pi/360
+        
+        if(mid != True):
+            if(midpoint > 500):
+                print('rotate right', midpoint)
+                vel_msg.angular.z = -abs(angular_speed)
+                velocity_publisher.publish(vel_msg)
+            elif(midpoint < 260):
+                print('rotate left', midpoint)
+                vel_msg.angular.z = abs(angular_speed)
+                velocity_publisher.publish(vel_msg)
+            else:
+                print('stop rotating', midpoint)
+                vel_msg.angular.z = 0
+                mid = True 
+                velocity_publisher.publish(vel_msg)
 
         # Get the action state for goals
         d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
@@ -341,29 +466,32 @@ def stop_condition(drone_name):
         goal_2 = MoveBaseGoal()
         goal_4 = MoveBaseGoal()
         
-            # goal header set to map 
+        # goal header set to map 
         goal_1.target_pose.header.frame_id = 'map'
-        goal_1.target_pose.pose.position.x = drone_x + 2.0
+        goal_1.target_pose.pose.position.x = drone_x 
         goal_1.target_pose.pose.position.y = drone_y 
-        goal_1.target_pose.pose.position.z = drone_z 
+        goal_1.target_pose.pose.position.z = drone_z
+
         goal_1.target_pose.pose.orientation.x = drone_orien_x
         goal_1.target_pose.pose.orientation.y = drone_orien_y
         goal_1.target_pose.pose.orientation.z = drone_orien_z 
         goal_1.target_pose.pose.orientation.w = drone_orien_w
 
         goal_2.target_pose.header.frame_id = 'map' 
-        goal_2.target_pose.pose.position.x = drone_x + 4.0
+        goal_2.target_pose.pose.position.x = drone_x 
         goal_2.target_pose.pose.position.y = drone_y 
-        goal_2.target_pose.pose.position.z = drone_z 
+        goal_2.target_pose.pose.position.z = drone_z
+
         goal_2.target_pose.pose.orientation.x = drone_orien_x
         goal_2.target_pose.pose.orientation.y = drone_orien_y
         goal_2.target_pose.pose.orientation.z = drone_orien_z 
         goal_2.target_pose.pose.orientation.w = drone_orien_w + 180
 
         goal_4.target_pose.header.frame_id = 'map' 
-        goal_4.target_pose.pose.position.x = drone_x + 6.0
+        goal_4.target_pose.pose.position.x = drone_x 
         goal_4.target_pose.pose.position.y = drone_y 
-        goal_4.target_pose.pose.position.z = drone_z 
+        goal_4.target_pose.pose.position.z = drone_z
+        
         goal_4.target_pose.pose.orientation.x = drone_orien_x
         goal_4.target_pose.pose.orientation.y = drone_orien_y
         goal_4.target_pose.pose.orientation.z = drone_orien_z
@@ -419,8 +547,48 @@ def stop_condition(drone_name):
         client_3.cancel_goal()
         client_4.cancel_goal()
 
+        # print(cords)
+        
         # Receive drone 3 position
-        pose_sub_4 = rospy.Subscriber('/drone4/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+        rospy.Subscriber('/drone4/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
+        
+        velocity_publisher = rospy.Publisher('/drone4/cmd_vel', Twist, queue_size=1)
+        velocity_publisher = rospy.Publisher('/drone4/cmd_vel', Twist, queue_size=1)
+
+        vel_msg = Twist()
+
+        x1 = cords[0]
+        x2 = cords[2]
+
+        midpoint = calculate_midpoint(x1, x2)
+        
+        vel_msg.linear.x=0
+        vel_msg.linear.y=0
+        vel_msg.linear.z=0
+        vel_msg.angular.x = 0
+        vel_msg.angular.y = 0
+        
+        speed = 5
+        
+        angular_speed = speed*2*math.pi/360
+        
+        if(mid != True):
+            if(midpoint > 500):
+                print('rotate right', midpoint)
+                vel_msg.angular.z = -abs(angular_speed)
+                velocity_publisher.publish(vel_msg)
+            elif(midpoint < 260):
+                print('rotate left', midpoint)
+                vel_msg.angular.z = abs(angular_speed)
+                velocity_publisher.publish(vel_msg)
+            else:
+                print('stop rotating', midpoint)
+                vel_msg.angular.z = 0
+                mid = True 
+                velocity_publisher.publish(vel_msg)
+
+             
+        
 
         # Get the action state for goals
         d1_action = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
@@ -543,7 +711,7 @@ def callback(msg, args):
     for i, label in enumerate(labels):
         row = cords[i]
         if row[4] > 0.96:
-            stop_condition(drone_name)
+            stop_condition(drone_name, row)
 
 
 
