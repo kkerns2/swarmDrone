@@ -4,8 +4,9 @@ import rospy
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Empty
 
+
 def takeoff_callback(msg): 
-  twist_msg.linear.z = 1.0
+  twist_msg.linear.z = rospy.get_param('height')
   i = 0
   while i < 3:
       cmd_vel_pub.publish(twist_msg)
@@ -16,7 +17,7 @@ def takeoff_callback(msg):
   cmd_vel_pub.publish(twist_msg)
   
 def land_callback(msg): 
-  twist_msg.linear.z = -1.0
+  twist_msg.linear.z = -(rospy.get_param('height'))
   i = 0
   while i < 10:
       cmd_vel_pub.publish(twist_msg)
