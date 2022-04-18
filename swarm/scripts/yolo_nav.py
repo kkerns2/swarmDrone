@@ -91,24 +91,6 @@ def retrieve_positions(msg):
     drone_orien_y = d_y 
     drone_orien_z = d_z  
     drone_orien_w = d_w
-
-def getD1Height(msg):
-    x = msg.pose.pose.position.x
-    y = msg.pose.pose.position.y
-    z = msg.pose.pose.position.z
-    print("getD1Height: ", x, y, z)
-
-def getD2Height(msg):
-    x = msg.pose.pose.position.x
-    y = msg.pose.pose.position.y
-    z = msg.pose.pose.position.z
-    print("getD2Height: ", x, y, z)
-
-def getD4Height(msg):
-    x = msg.pose.pose.position.x
-    y = msg.pose.pose.position.y
-    z = msg.pose.pose.position.z
-    print("getD4Height: ", x, y, z)
    
 
 def calculate_midpoint(x1, x2):
