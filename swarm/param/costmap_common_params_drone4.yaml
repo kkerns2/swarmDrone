@@ -1,5 +1,5 @@
 footprint: [[-0.45,-0.45],[-0.45, 0.45],[0.45, 0.45],[0.45, -0.45]]
-footprint_padding: 0.27
+footprint_padding: 0.2575
 observation_sources: hokuyo_utm30lx_sensor kinect_sensor
 hokuyo_utm30lx_sensor:
   sensor_frame: drone4/laser0_frame
@@ -21,8 +21,8 @@ kinect_sensor:
 
 inflation_layer:
   enabled:              true
-  cost_scaling_factor:  5.0  
-  inflation_radius:     2.5  
+  cost_scaling_factor:  1.0  
+  inflation_radius:     4.0
 
 static_layer:
   enabled:              true

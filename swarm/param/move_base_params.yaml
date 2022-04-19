@@ -21,4 +21,5 @@ conservative_reset_dist: 3.0
 base_local_planner: "dwa_local_planner/DWAPlannerROS"
 base_global_planner: "navfn/NavfnROS" 
 
+
 recovery_behavior_enabled: true
