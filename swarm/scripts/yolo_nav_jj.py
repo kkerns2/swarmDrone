@@ -119,7 +119,7 @@ def callback(msg, args):
     for i, label in enumerate(labels):
         row = cords[i]
         if row[4] > 0.96:
-            global_conditions.stop_condition(drone_name, cords)
+            global_conditions.stop_condition(drone_name)
 
 
 

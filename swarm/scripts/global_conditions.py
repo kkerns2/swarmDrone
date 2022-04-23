@@ -26,9 +26,25 @@ leader = [False] * (g_num_drones + 1) # over allocate for lazy indexing
 
 firstTime = 0 
 
+rand_list = [-6, -5, -4 ,-3, -2, 2, 3, 4, 5, 6]
 
-def calculate_midpoint(x1, x2):
-    return (x1 + x2) / 2
+buffer1 =random.choice(rand_list)
+
+rand_list.remove(buffer1)
+
+buffer2 = random.choice(rand_list)
+
+rand_list.remove(buffer2)
+
+buffer3 = random.choice(rand_list)
+
+rand_list.remove(buffer3)
+
+buffer4 = random.choice(rand_list)
+
+rand_list.remove(buffer4)
+
+
 
 def cancel_goals():
     for i in range(1, g_num_drones + 1):
@@ -71,7 +87,7 @@ def retrieve_positions(msg):
     drone_orien_z = d_z  
     drone_orien_w = d_w
 
-def stop_condition(drone_name, cords):
+def stop_condition(drone_name):
     global drone_x
     global drone_y
     global drone_z 
@@ -107,39 +123,6 @@ def stop_condition(drone_name, cords):
         cancel_goals()
 
         rospy.Subscriber(f'/{drone_name}/amcl_pose', PoseWithCovarianceStamped, retrieve_positions)
-        velocity_publisher = rospy.Publisher(f'/{drone_name}/cmd_vel', Twist, queue_size=1)
-        vel_msg = Twist()
-
-        x1 = cords[0]
-        x2 = cords[2]
-
-        midpoint = calculate_midpoint(x1, x2)
-        
-        vel_msg.linear.x=0
-        vel_msg.linear.y=0
-        vel_msg.linear.z=0
-        vel_msg.angular.x = 0
-        vel_msg.angular.y = 0
-        
-        speed = 5
-        angular_speed = speed*2*math.pi/360
-
-
-        if(mid != True):
-            if(midpoint > 500):
-                print('rotate right', midpoint)
-                vel_msg.angular.z = -abs(angular_speed)
-                velocity_publisher.publish(vel_msg)
-            elif(midpoint < 260):
-                print('rotate left', midpoint)
-                vel_msg.angular.z = abs(angular_speed)
-                velocity_publisher.publish(vel_msg)
-            else:
-                print('stop rotating', midpoint)
-                vel_msg.angular.z = 0
-                mid = True 
-                velocity_publisher.publish(vel_msg)
-
 
         for i in range(1, g_num_drones + 1):
             if i == drone_number:
@@ -150,13 +133,15 @@ def stop_condition(drone_name, cords):
             goal = MoveBaseGoal()
 
             goal.target_pose.header.frame_id = 'map' 
-            goal.target_pose.pose.position.x = drone_x
+            goal.target_pose.pose.position.x = drone_x + (2.0 * i) #param here
             goal.target_pose.pose.position.y = drone_y  
             goal.target_pose.pose.position.z = drone_z 
             goal.target_pose.pose.orientation.x = drone_orien_x
             goal.target_pose.pose.orientation.y = drone_orien_y
             goal.target_pose.pose.orientation.z = drone_orien_z
             goal.target_pose.pose.orientation.w = drone_orien_w
+            if (i > g_num_drones / 2):
+                goal.target_pose.pose.orientation.w = drone_orien_w + 180
 
             action.send_goal(goal)
 
