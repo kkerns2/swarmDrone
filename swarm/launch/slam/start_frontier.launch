@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
+    <!-- Launches Explore Lite and MoveBase for each Drone: 1 - 4 -->
+    
     <group ns="drone1">
         <include file="$(find swarm)/launch/slam/explore_costmap.launch">
             <arg name="tf_prefix" value="drone1"/>

@@ -6,11 +6,14 @@ import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 def movebase_drone2_client(x, y):
+    ''' 
+    Grabs Drone Movebase and assign the reference to Map, 
+    and feed the generated waypoints to navigate to. 
+    '''
+
     client2 = actionlib.SimpleActionClient('/drone2/move_base', MoveBaseAction)
     
     client2.wait_for_server()
-    
-    #client2.cancel_goal()
    
     goal2 = MoveBaseGoal()
    
@@ -35,7 +38,7 @@ def movebase_drone2_client(x, y):
         return client2.get_result()
 
 if __name__=='__main__':
-
+    # If Launching on different environment, change workspace name and user name 
     with open('/home/mcp/catkin_ws/src/swarm/waypoints/waypoints_d2.txt', 'r') as f:
         lines_2 = f.readlines()
 

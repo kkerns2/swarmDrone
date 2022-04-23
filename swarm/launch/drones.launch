@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 
+		If User enters slam:=true
+	       Spawn 4 Drones in SLAM Mode
+
+        Else User enters slam:=false 
+	 	   Spawn 4 Drones in Navigation Mode
+-->
+
 <launch>
 	<arg name="slam"/>
 	
-	<!-- If the user wants SLAM, spawn at the four corners of the map-->
-	  <group if="$(arg slam)">
+	<!-- If the User wants SLAM, spawn at the four corners of the map-->
+	<!-- All four Drones enter fixed height at 1.0 meter at four corners -->
+  
+		<group if="$(arg slam)">
 
 			<!-- Spawn Drone 1 -->
 			<group ns="drone1">
 				<include file="$(find swarm)/launch/single_drone.launch">
-					<arg name="x" value="-42"/> <!-- -40 -42 -->
+					<arg name="x" value="-42"/> 
 					<arg name="y" value="40"/>
 					<arg name="drone_name" value="drone1"/>
 					<arg name="slam" value="$(arg slam)"/> 
-					<arg name="height" value="1.30"/>
+					<arg name="height" value="1.0"/>
 				</include>
 			</group>
 			
 			<!-- Spawn Drone 2 -->
 			<group ns="drone2">
 				<include file="$(find swarm)/launch/single_drone.launch">
-					<arg name="x" value="-42"/> <!-- -42 40 -->
+					<arg name="x" value="-42"/> 
 					<arg name="y" value="-40"/>
 					<arg name="drone_name" value="drone2"/>
 					<arg name="slam" value="$(arg slam)"/> 
-					<arg name="height" value="1.16"/>
+					<arg name="height" value="1.0"/>
 				</include>
 			</group>
 
@@ -35,23 +45,25 @@
 					<arg name="y" value="40"/>
 					<arg name="drone_name" value="drone3"/>
 					<arg name="slam" value="$(arg slam)"/> 
-					<arg name="height" value="1.02"/>
+					<arg name="height" value="1.0"/>
 				</include>
 			</group>
 
 			<!-- Spawn Drone 4-->
 			<group ns="drone4">
 				<include file="$(find swarm)/launch/single_drone.launch">
-					<arg name="x" value="38"/> <!-- 120 44 -->
+					<arg name="x" value="38"/> 
 					<arg name="y" value="-40"/>
 					<arg name="drone_name" value="drone4"/>
 					<arg name="slam" value="$(arg slam)"/> 
-					<arg name="height" value="0.88"/>
+					<arg name="height" value="1.0"/>
 				</include>
 			</group>
 	</group> 
 
 		<!-- Unless the user is on navigation mode (slam is false)-->
+		<!-- Loads Created Map onto RVIZ --> 
+
     	<group unless="$(arg slam)">
 			<param name="/use_sim_time" value="true"/>
     		<arg name="map_file" default="$(find swarm)/maps/urban_small.yaml"/>
@@ -125,6 +137,7 @@
 		        </include>
 			</group>
 
+			<!-- Loads AMCL for all four drones for Navigation Mode -->
 				<include file="$(find swarm)/launch/navigation/amcl.launch">
            			<arg name="tf_prefix" value="drone1"/>
            			<arg name="odom_frame_id" value="drone1/world"/> 
@@ -153,7 +166,7 @@
             		<arg name="initial_pose_y" value="-19.6"/>
 		        </include>
 
-	 		<!-- Start rviz visualization with preset config -->
+	 		<!-- Starts up Singular RVIZ with the Loaded Map -->
  			 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find swarm)/rviz/all_drone_nav.rviz"/>
  	   </group>
 </launch>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <arg name="tf_prefix"/>
+
+  <!-- Explore Lite for each Drone -->
+  <!-- Allows the Drone to navigate/scout around the unknown environment -->
+  
+<arg name="tf_prefix"/>
+
 <node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
   <param name="robot_base_frame" value="/$(arg tf_prefix)/base_footprint"/>
   <param name="costmap_topic" value="/$(arg tf_prefix)/map"/>

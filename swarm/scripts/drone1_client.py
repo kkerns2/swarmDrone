@@ -6,26 +6,19 @@ import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 def movebase_drone1_client(x, y):
+    ''' 
+    Grabs Drone Movebase and assign the reference to Map, 
+    and feed the generated waypoints to navigate to. 
+    '''
     client1 = actionlib.SimpleActionClient('/drone1/move_base', MoveBaseAction)
-    
     client1.wait_for_server()
-    
-    #client1.cancel_goal()
-   
     goal1 = MoveBaseGoal()
-   
     goal1.target_pose.header.frame_id = "map"
-   
     goal1.target_pose.header.stamp = rospy.Time.now()
-
     goal1.target_pose.pose.position.x = x
-    
     goal1.target_pose.pose.position.y = y
-   
     goal1.target_pose.pose.orientation.w = 1.0
-    
     client1.send_goal(goal1)
-
     wait = client1.wait_for_result()
 
     if not wait:
@@ -35,7 +28,7 @@ def movebase_drone1_client(x, y):
         return client1.get_result()
 
 if __name__=='__main__':
-
+    # If Launching on different environment, change workspace name and user name 
     with open('/home/mcp/catkin_ws/src/swarm/waypoints/waypoints_d1.txt', 'r') as f:
         lines_1 = f.readlines()
 
@@ -48,7 +41,6 @@ if __name__=='__main__':
             drone1_coordinates[i][j] = float(drone1_coordinates[i][j])
 
     try:
-        #add coordinate logic here
         rospy.init_node('drone1_client_py')
         
         drone1_count = 0

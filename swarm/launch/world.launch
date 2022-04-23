@@ -11,17 +11,17 @@
   <arg name="headless" default="false"/>
   <arg name="pause" default="true"/>
 
+  <!-- Start up the Gazebo Simulator with the world file-->
   <node name="gazebo" pkg="gazebo_ros" type="gzserver" args="$(arg world_file) $(arg args)" respawn="false" output="screen"/>
  
- <!-- start gui -->
+ <!-- Start GUI -->
   <group if="$(arg gui)">
     <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
   </group>
  
-  <!-- Spawn simulated quadrotor uav -->
+  <!-- Spawn Simulated Hector Quadrotor -->
   <include file="$(find swarm)/launch/drones.launch">
     <arg name="slam" value="$(arg slam)"/> 
   </include>
  
 </launch>
-

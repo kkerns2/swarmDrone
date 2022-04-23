@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-<!--
-<arg name="map_file" default="/home/mcp/catkin_ws/src/swarm/maps/drone_final.yaml"/>
-    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
-        <param name="frame_id"  value="map"/>
-    </node>
+
+  <!--
+      AMCL Localization for Each Drone 
     -->
+    
     <arg name="tf_prefix" default=""/>
     <arg name="use_map_topic"   default="true"/>
     <arg name="scan_topic"      default="/$(arg tf_prefix)/scan"/>

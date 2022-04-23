@@ -2,10 +2,8 @@
 
 <launch>
   <!-- Look through scanmatch splicing in the begining of spawn map -->
+  <!-- Hector Slam Launch File --> 
   <arg name="tf_prefix"/>
-  <!--
-  <node pkg="tf" type="static_transform_publisher" name="map_to_odom_broadcaster" args="0 0 0 0 0 0 $(arg tf_prefix)/map $(arg tf_prefix)/world 100"/>
--->
 
   <param name="/use_sim_time" value="true"/>
   
@@ -47,9 +45,4 @@
 
   <node pkg="topic_tools" type="throttle" name="map_throttle" args="messages map 0.015 map_thottled" />
 
-   <!--
-
-  <node pkg="tf" type="static_transform_publisher" name="map_to_odom_broadcaster" args="0 0 0 0 0 0 $(arg tf_prefix)/map $(arg tf_prefix)/world 10"/>
- <node pkg="tf" type="static_transform_publisher" name="$(arg tf_prefix)_world_to_$(arg tf_prefix)_base_footprint_broadcaster"  args="0 0 0 0 0 0 /$(arg tf_prefix)/map /$(arg tf_prefix)/base_footprint 10"/>
--->
 </launch>

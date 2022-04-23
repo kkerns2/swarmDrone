@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch> 
+
+ <!-- Launches WayPoint Navigation for each Drone: 1 - 4 -->
+
   <node pkg="swarm" type="drone1_client.py" name="drone1_client_py" output="screen"/> 
   <node pkg="swarm" type="drone2_client.py" name="drone2_client_py" output="screen"/> 
   <node pkg="swarm" type="drone3_client.py" name="drone3_client_py" output="screen"/> 
